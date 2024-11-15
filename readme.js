@@ -12,7 +12,7 @@ function get_readme_path(dir) {
     } else if (stats.isFile() && filename.endsWith('README.mdx') && ! filename.endsWith('cfo/README.mdx')) {
       res.push(filepath)
     }
-    // console.log(res)
+    console.log(res)
   })
   return res
 }
