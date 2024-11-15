@@ -1,0 +1,19 @@
+```sh
+> find / -user flag00 2>/dev/null
+...output (only 2 lines) ---> and we want to cat them all out
+> find / -user flag00 -exec cat {} + 2>/dev/null
+cdiiddwpgswtgt
+```
+- `/` - from root directory
+- `+` - forces `find` to run `cat` on many files at once and not one at a time
+- `2>/dev/null` - redir stderr output to `/dev/null`
+```py
+a, z = ord('a'), ord('z')
+for i in range(25):
+    print(i, ''.join(chr(a + (ord(c) - a + i) % 26) for c in 'cdiiddwpgswtgt'))
+```
+```sh
+> su flag00
+> Password: nottoohardhere
+> getflag ---> run it as a cmd
+```
