@@ -30,3 +30,4 @@ function go() {
 
 const README = go()
 console.log(README)
+console.log('hello, world')
