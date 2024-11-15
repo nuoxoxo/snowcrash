@@ -17,7 +17,7 @@ function get_readme_path(dir) {
   return res
 }
 
-function go() {
+function get_readme_content() {
   let content = ''
   const readmes = get_readme_path(__dirname)
 
@@ -29,6 +29,6 @@ function go() {
   return content
 }
 
-const README = go()
+const README = get_readme_content()
 console.log(README)
 // console.log('hello, world')
