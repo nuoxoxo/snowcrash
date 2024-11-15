@@ -1,37 +1,3 @@
-# Level 01 - solution
-
-```
-$ su level01
-$ Password: x24ti5gi3x0ol2eh4esiuxias
-```
-- take a look at the legacy `/etc/passwd`
-```
-$ cat /etc/passwd
-$ cat /etc/passwd | grep -i flag01 | awk -F: '{print $2}'
-
-
-😀 if we have john we'll able to do:
-$ john --show <(cat /etc/passwd | grep -i flag01 | awk -F: '{print $2}')
-```
-- on host:
-```
-$ wget https://download.openwall.net/pub/projects/john/contrib/macosx/john-1.8.0.9-jumbo-macosx_sse4.zip
-$ tar -xvf john-1.8.0.9-jumbo-macosx_sse4.zip
-$ cd john-1.8.0.9-jumbo-macosx_sse4
-$ echo 42hDRfypTqqnw $ __test
-$ ./john --show __test
-```
-- VM
-```
-$ su flag01
-Password: abcdefg
-```
-
-# Level 01 - token
-
-```r
-x24ti5gi3x0ol2eh4esiuxias
-```
 
 
 # SSH
@@ -78,4 +44,38 @@ x24ti5gi3x0ol2eh4esiuxias
 ```
 
 
+# Level 01 - solution
+
+```
+$ su level01
+$ Password: x24ti5gi3x0ol2eh4esiuxias
+```
+- take a look at the legacy `/etc/passwd`
+```
+$ cat /etc/passwd
+$ cat /etc/passwd | grep -i flag01 | awk -F: '{print $2}'
+
+
+😀 if we have john we'll able to do:
+$ john --show <(cat /etc/passwd | grep -i flag01 | awk -F: '{print $2}')
+```
+- on host:
+```
+$ wget https://download.openwall.net/pub/projects/john/contrib/macosx/john-1.8.0.9-jumbo-macosx_sse4.zip
+$ tar -xvf john-1.8.0.9-jumbo-macosx_sse4.zip
+$ cd john-1.8.0.9-jumbo-macosx_sse4
+$ echo 42hDRfypTqqnw $ __test
+$ ./john --show __test
+```
+- VM
+```
+$ su flag01
+Password: abcdefg
+```
+
+# Level 01 - token
+
+```r
+x24ti5gi3x0ol2eh4esiuxias
+```
 
