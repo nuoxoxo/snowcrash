@@ -12,6 +12,7 @@ function get_readme_path(dir) {
     } else if (stats.isFile() && file === 'README.mdx') {
       res.push(filepath)
     }
+    console.log(res)
   })
   return res
 }
