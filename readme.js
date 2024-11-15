@@ -8,7 +8,7 @@ function get_readme_path(dir) {
     const filepath = path.join(dir, file)
     const stats = fs.statSync(filepath)
     if (stats.isDirectory() && file.startsWith('level')) {
-      res.push(get_readme_path(filepath))
+      res.push( ... get_readme_path(filepath))
     } else if (stats.isFile() && file === 'README.mdx') {
       res.push(filepath)
     }
