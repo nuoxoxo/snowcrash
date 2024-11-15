@@ -11,7 +11,7 @@ function get_readme_path(dir) {
       res.push( ... get_readme_path(filepath))
     } else if (stats.isFile() && filename.endsWith('README.mdx') && ! filepath.endsWith('cfo/README.mdx')) {
       res.push(filepath)
-      console.log(filepath)
+      // console.log(filepath)
     }
   })
   return res
