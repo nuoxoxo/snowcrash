@@ -46,11 +46,15 @@ x24ti5gi3x0ol2eh4esiuxias
 
 # Level 01 - solution
 
+- use token `x24...` from the last level
+
 ```
 $ su level01
 $ Password: x24ti5gi3x0ol2eh4esiuxias
 ```
-- take a look at the legacy `/etc/passwd`
+
+- take a look at legacy folder `/etc/passwd`
+
 ```
 $ cat /etc/passwd
 $ cat /etc/passwd | grep -i flag01 | awk -F: '{print $2}'
@@ -59,7 +63,7 @@ $ cat /etc/passwd | grep -i flag01 | awk -F: '{print $2}'
 😀 if we have john we'll able to do:
 $ john --show <(cat /etc/passwd | grep -i flag01 | awk -F: '{print $2}')
 ```
-- on host:
+- get and use `john` on host:
 ```
 $ wget https://download.openwall.net/pub/projects/john/contrib/macosx/john-1.8.0.9-jumbo-macosx_sse4.zip
 $ tar -xvf john-1.8.0.9-jumbo-macosx_sse4.zip
@@ -76,6 +80,6 @@ Password: abcdefg
 # Level 01 - token
 
 ```r
-x24ti5gi3x0ol2eh4esiuxias
+f2av5il02puano7naaf6adaaf
 ```
 
