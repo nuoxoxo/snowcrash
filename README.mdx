@@ -13,24 +13,24 @@ $ ssh 192.168.X.X
 
 ```
 $ find / -user flag00 2>/dev/null
-
-...output (only 2 lines) 👉 and we want to cat them all out
+...output (only 2 files)
+    👉 and we want to cat them all out
 
 $ find / -user flag00 -exec cat {} + 2>/dev/null
-
-cdiiddwpgswtgt 👉 looks like cipher
+cdiiddwpgswtgt
+    👉 looks like cipher to decode
 ```
 - explain
     - `/` - from root directory
     - `+` - forces `find` to run `cat` on many files at once and not one at a time
     - `2>/dev/null` - redir stderr output to `/dev/null`
-- solve the cipher
+- decipher in python
 ```
 a = ord('a')
 for i in range(25):
     print(i, ''.join(chr(a + (ord(c) - a + i) % 26) for c in 'cdiiddwpgswtgt'))
 ```
-- swicth to user `flag00` using the pw
+- swicth to user `flag00` w/ pw
 ```sh
 $ su flag00
 $ Password: nottoohardhere
