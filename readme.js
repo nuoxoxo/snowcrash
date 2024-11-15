@@ -22,7 +22,7 @@ function go() {
   const readmes = get_readme_path(__dirname)
 
   readmes.forEach(path => {
-    content += '\n\n' + fs.readFileSync(path, 'utf-8')
+    content = fs.readFileSync(path, 'utf-8') + '\n\n' + content
     // content = '\n\n' + content
   })
 
