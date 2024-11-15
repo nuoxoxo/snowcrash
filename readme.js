@@ -4,15 +4,15 @@ const path = require('path')
 function get_readme_path(dir) {
   let res = []  
   const files = fs.readdirSync(dir)
-  files.forEach(file => {
-    const filepath = path.join(dir, file)
+  files.forEach( filename => {
+    const filepath = path.join(dir, filename)
     const stats = fs.statSync(filepath)
-    if (stats.isDirectory() && file.startsWith('level')) {
+    if (stats.isDirectory() && filename.startsWith('level')) {
       res.push( ... get_readme_path(filepath))
-    } else if (stats.isFile() && file === 'README.mdx') {
+    } else if (stats.isFile() && filename.endsWith('README.mdx') {
       res.push(filepath)
     }
-    console.log(res)
+    // console.log(res)
   })
   return res
 }
@@ -31,4 +31,4 @@ function go() {
 
 const README = go()
 console.log(README)
-console.log('hello, world')
+// console.log('hello, world')
