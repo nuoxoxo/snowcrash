@@ -26,7 +26,7 @@ function get_readme_path(dir) {
 
 function get_readme_content() {
 
-  let content = fs.readFileSync('/home/runner/work/cfo/cfo/pw.mdx', 'utf-8')
+  let content = fs.readFileSync('/home/runner/work/cfo/cfo/tokens.mdx', 'utf-8')
   const readmes = get_readme_path(__dirname)
 
   readmes.forEach(path => {
