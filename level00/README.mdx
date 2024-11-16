@@ -1,6 +1,6 @@
 # SSH into VM on host
 
-```rb
+```b
 $ ifconfig
 $ ifconfig | grep inet
 $ ifconfig | grep 'inet ' | awk 'NR==2'
@@ -11,7 +11,7 @@ $ ssh level00@$(ifconfig | grep 'inet ' | awk 'NR==2 {print $2}') -p 4242
 
 - to begin with
 
-```
+```b
 $ ls -l
 $ find / -user level00 
 $ find / -user level00 2>/dev/null
