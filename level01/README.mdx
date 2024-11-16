@@ -18,14 +18,16 @@ $ cat /etc/passwd | grep -i flag01 | awk -F: '{print $2}'
 $ john --show <(cat /etc/passwd | grep -i flag01 | awk -F: '{print $2}')
 ```
 
-- get and use `john` on host:
+- use our own _`do_john`_ script
 
 ```b
 $ chmod +x do_john.sh
 $ ./do_john.sh
+```
 
-OR
+- or download and use _`john`_
 
+```b
 $ wget https://download.openwall.net/pub/projects/john/contrib/macosx/john-1.8.0.9-jumbo-macosx_sse4.zip
 $ tar -xvf john-1.8.0.9-jumbo-macosx_sse4.zip
 $ cd john-1.8.0.9-jumbo-macosx_sse4
