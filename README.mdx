@@ -103,19 +103,24 @@ Password: abcdefg
   - `scp` - secure copy - `scp username@ip:path _local_`
   - `~.pcap` - a Packet Capture to store network packet data captured during network traffic monitoring
 
+- save the `.pcap` to Host
 ```b
 ### VM
 > ls -l
 ----r--r-- 1 flag02 level02 level02.pcap
 ^ which means a regular file
 
-> scp -P 4242 level02@192.168.X.X:/home/user/level02/level02.pcap $(pwd)
+> scp -P 4242 level02@$(ifconfig|grep 'inet '|awk 'NR==2 {print $2}'):/home/user/level02/level02.pcap $(pwd)
+```
 
+- try inspecting the `.pcap` ❌ 
+
+```b
 ### Host
 > hexdump -C level02.pcap 
 > xxd level02.pcap 
 > xxd level02.pcap | grep -i pass -A10 -B10
-> xxd level02.pcap | cut -d ' ' -f2-9 | tr -d ' ' 👈 get midfields
+> xxd level02.pcap | cut -d ' ' -f2-9 | tr -d ' '
 ```
 
 - use _Wireshark_ 
@@ -146,7 +151,6 @@ Password: abcdefg
 000000CC  4c                                                 L
 000000CD  0d                                                 .
 ```
-
 
 ```py
 infile = [[n[-2], n[-1]] for n in [_.split() for _ in open(0).read().split('\n') if len(_.split()) == 3]]
