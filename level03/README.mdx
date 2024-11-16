@@ -13,14 +13,14 @@
 > ltrace ./level03
   👉 we can see the `s` bit in action
 
-### output
+>>> output
 getegid()                                           = 2003
 geteuid()                                           = 2003
 setresgid(2003, 2003, 2003, 0xb7e5ee55, 0xb7fed280) = 0
 setresuid(2003, 2003, 2003, 0xb7e5ee55, 0xb7fed280) = 0
 system("/usr/bin/env echo Exploit me" ...
 
-### observations
+>>> observations
   👉 getegid & geteuid return a effective group/user ID ie. 2003
   👉 setresgid & setresuid set Real/Effective/Saved ID to ensure
   that the process maintains privileges
