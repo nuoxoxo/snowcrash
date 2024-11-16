@@ -1,0 +1,10 @@
+- learn new commands
+  - `realpath` - get the full absolute filepath
+  - `scp` - secure copy - `scp username@ip:path _local_`
+```b
+> ls -l
+----r--r-- 1 flag02 level02 level02.pcap
+^ which means a regular file
+
+> scp -P 4242 level02@192.168.X.X:/home/user/level02/level02.pcap $(pwd)
+```
