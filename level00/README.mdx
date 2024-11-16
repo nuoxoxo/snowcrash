@@ -1,10 +1,10 @@
 # SSH into VM on host
 
-```
+```rb
 $ ifconfig
 $ ifconfig | grep inet
-    👉 find inet 192.168.X.X ...
-$ ssh 192.168.X.X
+$ ifconfig | grep 'inet ' | awk 'NR==2'
+$ ssh level00@$(ifconfig | grep 'inet ' | awk 'NR==2 {print $2}') -p 4242
 ```
 
 # 00
