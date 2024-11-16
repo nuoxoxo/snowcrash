@@ -4,7 +4,7 @@ const path = require('path')
 
 function get_readme_path(dir) {
 
-  let res = [path.join(dir, 'pw.mdx')]
+  let res = []
   const files = fs.readdirSync(dir)
 
   files.forEach( filename => {
@@ -26,12 +26,14 @@ function get_readme_path(dir) {
 
 function get_readme_content() {
 
-  let content = ''
+  // let content = fs.readFileSync(, 'utf-8')
+  /home/runner/work/cfo/cfo/level00/pw.mdx
   const readmes = get_readme_path(__dirname)
 
   readmes.forEach(path => {
     content += '\n\n' + fs.readFileSync(path, 'utf-8')// + '\n\n' + content
     // content = '\n\n' + content
+    console.log(path)
   })
   return content
 }
