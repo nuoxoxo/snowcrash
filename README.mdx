@@ -1,7 +1,4 @@
-# tokens
-
 ```b
-level00  level00 
 flag00  nottoohardhere 
 level01  x24ti5gi3x0ol2eh4esiuxias
 flag01  abcdefg
@@ -9,9 +6,9 @@ level02  f2av5il02puano7naaf6adaaf
 ```
 
 
-# SSH into VM on host
+# SSH
 
-```rb
+```b
 $ ifconfig
 $ ifconfig | grep inet
 $ ifconfig | grep 'inet ' | awk 'NR==2'
@@ -22,7 +19,7 @@ $ ssh level00@$(ifconfig | grep 'inet ' | awk 'NR==2 {print $2}') -p 4242
 
 - to begin with
 
-```
+```b
 $ ls -l
 $ find / -user level00 
 $ find / -user level00 2>/dev/null
@@ -44,32 +41,21 @@ for i in range(26):
     print(i, ''.join(chr(a + (ord(c) - a + i) % 26) for c in 'cdiiddwpgswtgt'))
 ```
 
-- swicth to user `flag00`
-
-```sh
-$ su flag00
-Password: nottoohardhere
-```
-
 # 00 - token
 
-```j
-> x24ti5gi3x0ol2eh4esiuxias
+```b
+> su flag00
+Password: nottoohardhere
+> su level01
+> Password: x24ti5gi3x0ol2eh4esiuxias
 ```
 
 
 # 01
 
-- use token `x24...` from the last level
-
-```
-$ su level01
-$ Password: x24ti5gi3x0ol2eh4esiuxias
-```
-
 - take a look at legacy folder `/etc/passwd`
 
-```
+```b
 $ cat /etc/passwd
 $ cat /etc/passwd | grep -i flag01 | awk -F: '{print $2}'
 
@@ -78,14 +64,16 @@ $ cat /etc/passwd | grep -i flag01 | awk -F: '{print $2}'
 $ john --show <(cat /etc/passwd | grep -i flag01 | awk -F: '{print $2}')
 ```
 
-- get and use `john` on host:
+- use our own _`do_john`_ script
 
-```
+```b
 $ chmod +x do_john.sh
 $ ./do_john.sh
+```
 
-OR
+- or download and use _`john`_
 
+```b
 $ wget https://download.openwall.net/pub/projects/john/contrib/macosx/john-1.8.0.9-jumbo-macosx_sse4.zip
 $ tar -xvf john-1.8.0.9-jumbo-macosx_sse4.zip
 $ cd john-1.8.0.9-jumbo-macosx_sse4
@@ -94,16 +82,27 @@ $ ./john __test
 $ ./john --show __test
 ```
 
-- VM
-
-```
-$ su flag01
-Password: abcdefg
-```
-
 # 01 - token
 
-```r
-> f2av5il02puano7naaf6adaaf
+```b
+> su flag01
+Password: abcdefg
+> su level02
+> Password: f2av5il02puano7naaf6adaaf
+```
+
+
+# 02
+
+- new stuff
+  - `realpath` - get the full absolute filepath
+  - `scp` - secure copy - `scp username@ip:path _local_`
+  - `~.pcap` - a Packet Capture to store network packet data captured during network traffic monitoring
+```b
+> ls -l
+----r--r-- 1 flag02 level02 level02.pcap
+^ which means a regular file
+
+> scp -P 4242 level02@192.168.X.X:/home/user/level02/level02.pcap $(pwd)
 ```
 

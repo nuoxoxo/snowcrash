@@ -1,6 +1,6 @@
-# SSH into VM on host
+# SSH
 
-```rb
+```b
 $ ifconfig
 $ ifconfig | grep inet
 $ ifconfig | grep 'inet ' | awk 'NR==2'
@@ -11,7 +11,7 @@ $ ssh level00@$(ifconfig | grep 'inet ' | awk 'NR==2 {print $2}') -p 4242
 
 - to begin with
 
-```
+```b
 $ ls -l
 $ find / -user level00 
 $ find / -user level00 2>/dev/null
@@ -33,15 +33,11 @@ for i in range(26):
     print(i, ''.join(chr(a + (ord(c) - a + i) % 26) for c in 'cdiiddwpgswtgt'))
 ```
 
-- swicth to user `flag00`
-
-```sh
-$ su flag00
-Password: nottoohardhere
-```
-
 # 00 - token
 
-```j
-> x24ti5gi3x0ol2eh4esiuxias
+```b
+> su flag00
+Password: nottoohardhere
+> su level01
+> Password: x24ti5gi3x0ol2eh4esiuxias
 ```
