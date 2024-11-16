@@ -4,7 +4,7 @@ const path = require('path')
 
 function get_readme_path(dir) {
 
-  let res = [path.join(dir, 'go.js')]
+  let res = [path.join(dir, 'pw.mdx')]
   const files = fs.readdirSync(dir)
 
   files.forEach( filename => {
