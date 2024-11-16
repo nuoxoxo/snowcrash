@@ -3,6 +3,7 @@
 # SSH
 
 on host do
+
 ```
 $ ifconfig
     👉 find inet 192.168.X.X ...
@@ -11,21 +12,23 @@ $ ssh 192.168.X.X
 
 # 00
 
-```
-$ find / -user flag00 2>/dev/null
-...output (only 2 files)
-    👉 and we want to cat them all out
+- to begin with
 
-$ find / -user flag00 -exec cat {} + 2>/dev/null
+```
+$ ls -l
+$ find / -user level00 
+$ find / -user level00 2>/dev/null
+$ find / -user flag00 2>/dev/null
+$ find / -user flag00 -exec cat {} + 2>/dev/null\
 cdiiddwpgswtgt
-    👉 looks like cipher to decode
+cdiiddwpgswtgt
 ```
 
 - command explained
     - `/` - from root directory
     - `+` - forces `find` to run `cat` on many files at once and not one at a time
     - `2>/dev/null` - redir stderr output to `/dev/null`
-- decipher in python
+- decipher ___`cdiiddwpgswtgt`___ in python
 
 ```py
 a = ord('a')
@@ -33,7 +36,7 @@ for i in range(26):
     print(i, ''.join(chr(a + (ord(c) - a + i) % 26) for c in 'cdiiddwpgswtgt'))
 ```
 
-- swicth to user `flag00` w/ pw
+- swicth to user `flag00`
 
 ```sh
 $ su flag00
