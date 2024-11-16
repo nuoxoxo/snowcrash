@@ -31,7 +31,6 @@ function get_readme_content() {
 
   readmes.forEach(path => {
     content += '\n\n' + fs.readFileSync(path, 'utf-8')// + '\n\n' + content
-    console.log(path)
   })
   return content
 }
