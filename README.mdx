@@ -113,7 +113,7 @@ Password: abcdefg
 > scp -P 4242 level02@$(ifconfig|grep 'inet '|awk 'NR==2 {print $2}'):/home/user/level02/level02.pcap $(pwd)
 ```
 
-- try inspecting the `.pcap` ❌ 
+- ❌ inspect the `.pcap`  
 
 ```b
 ### Host
@@ -123,7 +123,7 @@ Password: abcdefg
 > xxd level02.pcap | cut -d ' ' -f2-9 | tr -d ' '
 ```
 
-- use _Wireshark_ 
+- ✅ use _Wireshark_ 
   - _Analyze - Follow - TCP Stream_ 
   - copy _`TCP Stream`_ to text
 
@@ -152,15 +152,21 @@ Password: abcdefg
 000000CD  0d                                                 .
 ```
 
+- `7f` - DE
+- `0d` - CR
+
 ```py
 infile = [[n[-2], n[-1]] for n in [_.split() for _ in open(0).read().split('\n') if len(_.split()) == 3]]
 res = ''
 for i, line in enumerate(infile):
     print('line/', line, 'i/', i)
-    l, r = line
-    if l == '7f': res = res[:-1]
-    elif r != '.': res += r
-    else: assert(l == '0d')
+    x, c = line
+    if x == '7f':
+        res = res[:-1]
+    elif c != '.':
+        res += c
+    else:
+        assert(x == '0d')
 print('res/', res)
 
 # ft_waNDReL0L
