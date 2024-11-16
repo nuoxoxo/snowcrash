@@ -1,6 +1,6 @@
 # 01
 
-- take a look at legacy folder `/etc/passwd`
+- Legacy folder `/etc/passwd`
 
 ```b
 $ cat /etc/passwd
@@ -11,7 +11,7 @@ $ cat /etc/passwd | grep -i flag01 | awk -F: '{print $2}'
 $ john --show <(cat /etc/passwd | grep -i flag01 | awk -F: '{print $2}')
 ```
 
-- use our own _`do_john`_ script
+- Use our own _`do_john`_ script
 
 ```b
 $ chmod +x do_john.sh
