@@ -9,7 +9,7 @@ $ Password: x24ti5gi3x0ol2eh4esiuxias
 
 - take a look at legacy folder `/etc/passwd`
 
-```
+```b
 $ cat /etc/passwd
 $ cat /etc/passwd | grep -i flag01 | awk -F: '{print $2}'
 
@@ -20,7 +20,7 @@ $ john --show <(cat /etc/passwd | grep -i flag01 | awk -F: '{print $2}')
 
 - get and use `john` on host:
 
-```
+```b
 $ chmod +x do_john.sh
 $ ./do_john.sh
 
