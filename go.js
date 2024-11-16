@@ -27,7 +27,7 @@ function get_readme_path(dir) {
 function get_readme_content() {
 
   // let content = fs.readFileSync(, 'utf-8')
-  /home/runner/work/cfo/cfo/level00/pw.mdx
+  let content = ''
   const readmes = get_readme_path(__dirname)
 
   readmes.forEach(path => {
