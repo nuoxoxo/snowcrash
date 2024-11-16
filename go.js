@@ -26,13 +26,11 @@ function get_readme_path(dir) {
 
 function get_readme_content() {
 
-  // let content = fs.readFileSync(, 'utf-8')
-  let content = ''
+  let content = fs.readFileSync('/home/runner/work/cfo/cfo/pw.mdx', 'utf-8')
   const readmes = get_readme_path(__dirname)
 
   readmes.forEach(path => {
     content += '\n\n' + fs.readFileSync(path, 'utf-8')// + '\n\n' + content
-    // content = '\n\n' + content
     console.log(path)
   })
   return content
