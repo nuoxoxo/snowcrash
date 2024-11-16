@@ -98,11 +98,43 @@ Password: abcdefg
   - `realpath` - get the full absolute filepath
   - `scp` - secure copy - `scp username@ip:path _local_`
   - `~.pcap` - a Packet Capture to store network packet data captured during network traffic monitoring
+
 ```b
+### VM
 > ls -l
 ----r--r-- 1 flag02 level02 level02.pcap
 ^ which means a regular file
 
 > scp -P 4242 level02@192.168.X.X:/home/user/level02/level02.pcap $(pwd)
+
+### Host
+> hexdump -C level02.pcap 
+> xxd level02.pcap 
+> xxd level02.pcap | grep -i pass -A10 -B10
+> xxd level02.pcap | cut -d ' ' -f2-9 | tr -d ' ' 👈 get midfields
 ```
+
+- use Wireshark 
+  - _Analyze - Follow - TCP Stream_ - copy _TCP Stream_ to text
+
+```py
+infile = [[n[-2], n[-1]] for n in [_.split() for _ in open(0).read().split('\n') if len(_.split()) == 3]]
+res = ''
+for i, line in enumerate(infile):
+    print('line/', line, 'i/', i)
+    l, r = line
+    if l == '7f': res = res[:-1]
+    elif r != '.': res += r
+    else: assert(l == '0d')
+print('res/', res)
+
+# ft_waNDReL0L
+```
+
+# 02 - token
+
+> su flag02
+Password: ft_waNDReL0L
+> su level03
+> Password: kooda2puivaav1idi4f57q8iq
 
