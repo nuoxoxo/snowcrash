@@ -7,9 +7,7 @@ Login
 > Password: x24ti5gi3x0ol2eh4esiuxias
 ```
 
-Idea
-
-- Look at `/etc/passwd`
+Look at `/etc/passwd`
 
 ```b
 > grep -i flag01 /etc/passwd
@@ -23,7 +21,7 @@ flag01:42hDRfypTqqnw:3001:3001::/home/flag/flag01:/bin/bash
   > john --show <(cat /etc/passwd | grep -i flag01 | awk -F: '{print $2}')
 ```
 
-- Download and use `john`
+Download and use `john`
 
 ```b
 > wget https://download.openwall.net/pub/projects/john/contrib/macosx/john-1.8.0.9-jumbo-macosx_sse4.zip
