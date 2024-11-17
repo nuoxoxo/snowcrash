@@ -27,12 +27,9 @@ res = ''
 for i, line in enumerate(infile):
     print('line/', line, 'i/', i)
     x, c = line
-    if x == '7f':
-        res = res[:-1]
-    elif c != '.':
-        res += c
-    else:
-        assert(x == '0d')
+    if x == '7f': res = res[:-1]
+    elif c != '.': res += c
+    else: assert (x == '0d')
 print('res/', res)
 
 
