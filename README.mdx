@@ -122,6 +122,13 @@ OR
 
 # 02
 
+Login
+
+```b
+> ssh level02@$(ifconfig|grep 'inet '|awk 'NR==2 {print $2}') -p 4242
+> Password: f2av5il02puano7naaf6adaaf
+```
+
 - New stuff
   - `realpath` - get the full absolute filepath
   - `scp` - secure copy - `scp username@ip:path _local_`
@@ -194,15 +201,6 @@ for i, line in enumerate(infile):
 print('res/', res)
 
 # ft_waNDReL0L
-```
-
-- token
-
-```b
-> su flag02
-Password: ft_waNDReL0L
-> su level03
-> Password: kooda2puivaav1idi4f57q8iq
 ```
 
 
