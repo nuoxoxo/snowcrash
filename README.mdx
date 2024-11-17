@@ -369,6 +369,13 @@ or
 
 # 05
 
+Login
+
+```b
+> ssh level05@$(ifconfig|grep 'inet '|awk 'NR==2 {print $2}') -p 4242
+> Password: ne2searoevaevoem4ov4ar8ap
+```
+
 First observation
 - an empty dir and nothing happens
 - a _hint_ says "mail" and "cronjob"
