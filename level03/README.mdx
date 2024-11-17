@@ -45,11 +45,11 @@ system("/usr/bin/env echo Exploit me" ...
 
 ### observations
 👉 getegid & geteuid return a effective group/user ID 2003 
-  which is my `id` as `level03`
-👉 but as privileges are elevated during the process
-  we have temporary permissions as `flag03`
-👉 this way we can exploit the `/usr/bin/env echo`
-  relative path vulnerability
+  which is my `id` as `level03`.
+👉 Because privileges are elevated during the process
+  we have temporary permissions as `flag03`.
+👉 This way we can exploit the `/usr/bin/env echo`
+  relative path vulnerability.
 ```
 
 - Solution
