@@ -17,6 +17,7 @@ flag01:42hDRfypTqqnw:3001:3001::/home/flag/flag01:/bin/bash
 
 What is `/etc/passwd`
 - it is a list of user accounts and their info
+
 ```b
 username:PWD:UID:GID:comment:home_dir:shell
          ^^^ ancient storage for encrypted passwd
@@ -40,12 +41,14 @@ OR
 
 Why use `john`
 - `./john --show` provides this line in the output
+
 ```b
 [DES 128/128 SSE2-16]
 ```
+
 - Data Encryption Standard (DES)
 - DES is not truly encryption in the sense of encryption algorithms
 - it is an old one-way transformation used to store passwds
 - it is insecure due to small key size 
 - using john to bruteforce-crack it is the most effecive way
-```
+
