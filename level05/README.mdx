@@ -57,5 +57,7 @@ level05@SnowCrash:~$ echo '/bin/getflag > /tmp/temp' \
 > /opt/openarenaserver/solve.sh && \
 chmod +x /opt/openarenaserver/solve.sh
 
-# remember `/usr/sbin/openarenaserver` runs `bash -x "$i"` in a subshell
+# remember
+# `/usr/sbin/openarenaserver` runs `bash -x "$i"` in a subshell
+# it won't stdout anything whether we use `tee` `tee /dev/tty` or `sync` 
 ```
