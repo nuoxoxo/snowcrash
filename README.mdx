@@ -196,12 +196,11 @@ Password: ft_waNDReL0L
        ^^^ others can rx
 
 👉 when ./level03 is run
-  the entire process executes with the permissions of the owner
-  which means we can access resources only available to owner `flag03`
-  it also means we have access to resources limited to group `level03`
+  the entire process runs with owner flag03's priviledges
+  ie. I, user level00, can exploit priviledges limited to flag03
 
-👉 conclusion: we can execute the program and doing so we gain
-  temporary elevated permissions
+👉 conclusion: execute the ./level03 and doing so we gain
+  temporary elevated permissions as flag03
 ```
 
 - We may also try `id` & `namei`
