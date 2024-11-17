@@ -93,17 +93,19 @@ Login
 ```
 
 Look at `/etc/passwd`
-
 ```b
 > grep -i flag01 /etc/passwd
 flag01:42hDRfypTqqnw:3001:3001::/home/flag/flag01:/bin/bash
 > grep flag01 /etc/passwd | awk -F: '{print $2}'
 42hDRfypTqqnw
+```
 
-### observation
-  if we have john as a cli tool we'll able to one of these:
-  > john --show <(grep flag01 /etc/passwd | awk -F: '{print $2}')  
-  > john --show <(cat /etc/passwd | grep -i flag01 | awk -F: '{print $2}')
+What is `/etc/passwd`
+- it is a list of user accounts and their info
+```b
+username:PWD:UID:GID:comment:home_dir:shell
+         ^^^ ancient storage for encrypted passwd
+             now passwd hashes are stored in /etc/shadow
 ```
 
 Download and use `john`
