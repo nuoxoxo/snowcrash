@@ -1,17 +1,29 @@
 # 01
 
-- Legacy folder `/etc/passwd`
+Login
 
 ```b
-> cat /etc/passwd
-> cat /etc/passwd | grep -i flag01 | awk -F: '{print $2}'
+> ssh level01@$(ifconfig|grep 'inet '|awk 'NR==2 {print $2}') -p 4242
+> Password: x24ti5gi3x0ol2eh4esiuxias
+```
+
+Idea
+
+- Look at `/etc/passwd`
+
+```b
+> grep -i flag01 /etc/passwd
+flag01:42hDRfypTqqnw:3001:3001::/home/flag/flag01:/bin/bash
+> grep flag01 /etc/passwd | awk -F: '{print $2}'
+42hDRfypTqqnw
 
 ### observation
-  😀 if we have john we'll able to do:
+  if we have john as a cli tool we'll able to one of these:
+  > john --show <(grep flag01 /etc/passwd | awk -F: '{print $2}')  
   > john --show <(cat /etc/passwd | grep -i flag01 | awk -F: '{print $2}')
 ```
 
-- Use `john`
+- Download and use `john`
 
 ```b
 > wget https://download.openwall.net/pub/projects/john/contrib/macosx/john-1.8.0.9-jumbo-macosx_sse4.zip
@@ -24,13 +36,5 @@
 OR
 
 > ./do_john.sh
-```
-
-- token
-
-```b
-> su flag01
-Password: abcdefg
-> su level02
-> Password: f2av5il02puano7naaf6adaaf
+> ?:abcdefg
 ```
