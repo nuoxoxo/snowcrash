@@ -200,8 +200,10 @@ Password: ft_waNDReL0L
   which means we can access resources only available to owner `flag03`
   it also means we have access to resources limited to group `level03`
 ```
+
 - We may also try
-```
+
+```b
 > id
 uid=2003(level03) gid=2003(level03) groups=2003(level03),100(users)
 
@@ -212,7 +214,9 @@ dr-x------ level03 level03 .
 > namei -l /bin/getflag
 -rwxr-xr-x root root getflag
 ```
+
 - `ltrace` traces library function calls when the binary is executed
+
 ```b
 > ltrace ./level03
   👉 we can see the `s` bit in action
