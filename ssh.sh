@@ -1,4 +1,4 @@
 #!/bin/bash
 
-ssh level04@$(ifconfig | grep 'inet ' | awk 'NR==2 {print $2}') -p 4242
+ssh level00@$(ifconfig | grep 'inet ' | awk 'NR==2 {print $2}') -p 4242
 
