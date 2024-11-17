@@ -418,11 +418,9 @@ What this script does:
 
 Exploit
 - put a script inside `/opt/openarenaserver/` 
-- ~~use `tee` : _read stdin and write to stdout and files_~~
-- let it be run in 2min 
 
-```bash
-level05@SnowCrash:~$ echo '/bin/getflag > /tmp/temp' \
+```r
+$ echo '/bin/getflag > /tmp/temp' \
 > /opt/openarenaserver/solve.sh && \
 chmod +x /opt/openarenaserver/solve.sh
 
@@ -430,6 +428,9 @@ chmod +x /opt/openarenaserver/solve.sh
 # `/usr/sbin/openarenaserver` runs `bash -x` in a subshell
 # it'll stdout nothing whether we `tee` `tee /dev/tty` or `sync` 
 ```
+
+- ~~use `tee` : _read stdin and write to stdout and files_~~
+- let it be run in 2min 
 
 
 # 06 - Todo: `php` `regex`
