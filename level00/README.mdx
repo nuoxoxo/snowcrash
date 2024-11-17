@@ -16,7 +16,8 @@ Ideas
 - `id` `whoami` `id flag00`
   - we are level00 
   - another user flag00 has different permissions
-- Let's compare their privileges:
+
+Let's compare privileges btw level00 and flag00:
 
 ```b
 > grep level00 /etc/passwd
@@ -30,8 +31,7 @@ total 0
 ls: cannot open directory /home/flag/flag00: Permission denied
 ```
 
-- `level00` has an empty Home directory
-- Let's check if we have other files outside of Home
+Let's check if we have other files outside of Home
 
 ```b
 > ls -l
@@ -51,7 +51,7 @@ cdiiddwpgswtgt
 - `+` : forces `find` to run `cat` on many files at once 
 
 
-Decipher ___`cdiiddwpgswtgt`___ in python
+Decipher _`cdiiddwpgswtgt`_ in python
 
 ```py
 a = ord('a')
