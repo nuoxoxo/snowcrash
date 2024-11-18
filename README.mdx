@@ -994,3 +994,13 @@ echo ;gettoken > /tmp/tmp | sha1sum
 # all it does is redir the token to /tmp/tmp
 ```
 
+
+# 12
+
+Login
+
+```b
+> ssh level12@$(ifconfig|grep 'inet '|awk 'NR==2 {print $2}') -p 4242
+> Password: fa6v5ateaw21peobuub8ipe6s
+```
+
