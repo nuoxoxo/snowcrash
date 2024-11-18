@@ -761,5 +761,31 @@ Login
 > Password: s5cAJpM8ev6XHw998pRWG728z
 ```
 
-## _todo_
+Again 2 files
+
+```b
+> ls -l
+-rwsr-sr-x+ 1 flag10 level10 10817 level10
+-rw-------  1 flag10 flag10     26 token
+
+> cat token
+cat: token: Permission denied
+
+> ./level10
+./level10 file host
+	sends file to host if you have access to it
+
+> ./level10 token localhost
+You don't have access to ./token
+
+> ltrace ./level10 token localhost
+__libc_start_main(0x80486d4, 3, 0xbffff7d4, 0x8048970, 0x80489e0 <unfinished ...>
+access("token", 4)                                         = -1
+^^^^^^ 🟡 
+printf("You don't have access to %s\n", "token"You don't have access to token
+)           = 31
++++ exited (status 31) +++
+```
+
+`access` - check real user's permissions for a file
 
