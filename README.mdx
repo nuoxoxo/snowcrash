@@ -652,38 +652,37 @@ cat: token: Permission denied
 Tryout
 
 ```b
-# run it
-
 > echo "a" > /tmp/tmp && ./level08 /tmp/tmp
 a
-> echo "aB" > /tmp/tmp && ./level08 /tmp/tmp
-aB
-
-# ltrace
-
-> ltrace ./level08 /tmp
-__libc_start_main(0x8048554, 2, 0xbffff7e4, 0x80486b0, 0x8048720 <unfinished ...>
-strstr("/tmp", "token")                                    = NULL
-^^^^^^          ^^^^^ 🟡
-open("/tmp", 0, 014435162522)                              = -1
-err(1, 0x80487b2, 0xbffff90a, 0xb7fe765d, 0xb7e3ebaflevel08: Unable to open /tmp: Permission denied
- <unfinished ...>
-+++ exited (status 1) +++
 
 > ltrace ./level08 /tmp/tmp
 __libc_start_main(0x8048554, 2, 0xbffff7d4, 0x80486b0, 0x8048720 <unfinished ...>
 strstr("/tmp/tmp", "token")                                = NULL
-^^^^^^              ^^^^^ 🟡
 open("/tmp/tmp", 0, 014435162522)                          = 3
-read(3, "aB\n", 1024)                                      = 3
-write(1, "aB\n", 3aB
-)                                        = 3
-+++ exited (status 3) +++
+read(3, "a\n", 1024)                                       = 2
+write(1, "a\n", 2a
+)                                         = 2
++++ exited (status 2) +++
+```
+
+```b
+> echo "aB" > /tmp/tmp && ./level08 /tmp/tmp
+aB
+
+> ltrace ./level08 /tmp/tmp
+__libc_start_main(0x8048554, 2, 0xbffff7d4, 0x80486b0, 0x8048720 <unfinished ...>
+strstr("/tmp/tmp", "token")                                = NULL
+open("/tmp/tmp", 0, 014435162522)                          = 3
+read(3, "a\n", 1024)                                       = 2
+write(1, "a\n", 2a
+)                                         = 2
++++ exited (status 2) +++
 ```
 
 Observation:
 
-- it reads file contents, as long as the filename contains no substr "token" 
+- only the filename matters
+- `./level` will cat the file, as long as filename contains no substr "token"
 - renaming `./token` is not allowed
 - but we can make a symlink of it
   - syntax: `ln -s real_path_src real_path_symlink`
