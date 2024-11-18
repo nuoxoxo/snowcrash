@@ -1,6 +1,12 @@
 const fs = require('fs')
 const path = require('path')
 
+console.log(
+  process.env.GITHUB_SERVER_URL,
+  'https://github.com',
+  process.env.GITHUB_REPOSITORY,
+  process.env.GITHUB_REF_NAME
+)
 
 function get_readme_path(dir) {
 
