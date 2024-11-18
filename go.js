@@ -27,6 +27,8 @@ function get_readme_path(dir) {
 function get_readme_content() {
 
   let content = fs.readFileSync(__dirname + '/tokens.mdx', 'utf-8')
+
+  content += 'Levels: '
   let n = 11
   for (let i = 0; i < n; i++) {
     num = i.toString()
