@@ -35,7 +35,7 @@ function get_readme_content() {
   let content = fs.readFileSync(__dirname + '/tokens.mdx', 'utf-8')
   let branch_addr = process.env.GITHUB_SERVER_URL + '/' + 
     process.env.GITHUB_REPOSITORY + '/tree/' + 
-    process.env.GITHUB_REF_NAME + '?tab=readme-ov-file#0'
+    process.env.GITHUB_REF_NAME + '?tab=readme-ov-file#'
 
   console.log(branch_addr)
 
@@ -43,6 +43,7 @@ function get_readme_content() {
   let n = 11
   for (let i = 0; i < n; i++) {
     num = i.toString()
+    if (num.length == 1) { num = '0' + num }
     content += '[' + num + '](' + branch_addr + num + ')'
     // content += '[' + num + '](https://github.com/nuoxoxo/snowcrash/tree/main?tab=readme-ov-file#0' + num + ')'
     if (i < n - 1 ) { content += ' - ' }
