@@ -932,9 +932,8 @@ A lua script
 
 > file level11.lua 
 level11.lua: setuid setgid a lua script, ASCII text executable
-```
-```b
-> strings level11.lua 
+
+> cat level11.lua 
 #!/usr/bin/env lua
 local socket = require("socket")
 local server = assert(socket.bind("127.0.0.1", 5151))
