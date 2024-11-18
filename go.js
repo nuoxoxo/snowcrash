@@ -29,8 +29,8 @@ function get_readme_content() {
   let content = fs.readFileSync(__dirname + '/tokens.mdx', 'utf-8')
   let n = 11
   for (let i = 0; i < n; i++) {
-    num = toString(i)
-    content += '[' + num + '](https://github.com/nuoxoxo/snowcrash/tree/main?tab=readme-ov-file#0' + toString(i)
+    num = i.toString()
+    content += '[' + num + '](https://github.com/nuoxoxo/snowcrash/tree/main?tab=readme-ov-file#0' + num
     if (i < n - 1 ) { content += ' - ' }
   }
 
