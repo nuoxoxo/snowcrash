@@ -36,8 +36,7 @@ function get_readme_content() {
   let branch_addr = process.env.GITHUB_SERVER_URL + '/' + 
     process.env.GITHUB_REPOSITORY + '/tree/' + 
     process.env.GITHUB_REF_NAME + '?tab=readme-ov-file#'
-
-  console.log(branch_addr)
+  // console.log(branch_addr)
 
   content += 'Level '
   let n = 11
