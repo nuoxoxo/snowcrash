@@ -697,3 +697,24 @@ Solution
 > ./level08 /tmp/totem
 ```
 
+
+# 08
+
+Login
+
+```b
+> ssh level09@$(ifconfig|grep 'inet '|awk 'NR==2 {print $2}') -p 4242
+> Password: 25749xKZ8L7DkSCwJkT9dyv6f
+> ls -l
+-rwsr-sr-x 1 flag09 level09 7640 level09
+----r--r-- 1 flag09 level09   26 token
+```
+
+```b
+> xxd token
+0000000: 6634 6b6d 6d36 707c 3d82 7f70 826e 8382  f4kmm6p|=..p.n..
+0000010: 4442 8344 757b 7f8c 890a                 DB.Du{....
+```
+
+
+
