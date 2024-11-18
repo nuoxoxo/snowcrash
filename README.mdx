@@ -741,7 +741,7 @@ zbd 👈 char = curr - i + 1
 
 Simple algo
 
-- p2: decode in vm, respect python2 syntax
+- p2: respect the syntax, write script in `vm/tmp/`
 ```b
 line = open('/home/user/level09/token').read().strip()
 print 'res/', ''.join(chr(ord(_) - i) for i, _ in enumerate(line))
