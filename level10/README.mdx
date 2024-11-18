@@ -25,7 +25,11 @@ cat: token: Permission denied
 
 > ./level10 token localhost
 You don't have access to ./token
+```
 
+ltrace
+
+```b
 > ltrace ./level10 token localhost
 __libc_start_main(0x80486d4, 3, 0xbffff7d4, 0x8048970, 0x80489e0 <unfinished ...>
 access("token", 4)                                         = -1
@@ -36,3 +40,18 @@ printf("You don't have access to %s\n", "token"You don't have access to token
 ```
 
 `access` - check real user's permissions for a file
+- touch a file of our own, try again
+
+```b
+> ./level10 /tmp/tmp localhost
+Connecting to localhost:6969 .. Unable to connect to host localhost
+
+> ltrace ./level10 /tmp/tmp localhost
+__libc_start_main(0x80486d4, 3, 0xbffff7d4, 0x8048970, 0x80489e0 <unfinished ...>
+access("/tmp/tmp", 4)                                      = 0
+printf("Connecting to %s:6969 .. ", "localhost")           = 32
+                         ^^^^ 🟡 
+fflush(0xb7fd1a20Connecting to localhost:6969 .. )         = 0
+                                         ^^^^ 🟡 
+```
+
