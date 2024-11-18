@@ -10,11 +10,13 @@ level06  viuaaale9huek52boumoomioc
 level07  wiok45aaoguiboiki2tuin6ub
 level08  fiumuikeil55xe9cu4dood66h
 level09  25749xKZ8L7DkSCwJkT9dyv6f 
+level10  s5cAJpM8ev6XHw998pRWG728z
 
 flag00  nottoohardhere 
 flag01  abcdefg
 flag02  ft_waNDReL0L
 flag08  quif5eloekouj29ke0vouxean 😑
+flag08  f3iji1ju5yuevaus41q1afiuq
 ```
 
 
@@ -695,5 +697,55 @@ Solution
 ```b
 > ln -s `realpath token` /tmp/totem
 > ./level08 /tmp/totem
+```
+
+
+# 08
+
+Login
+
+```b
+> ssh level09@$(ifconfig|grep 'inet '|awk 'NR==2 {print $2}') -p 4242
+> Password: 25749xKZ8L7DkSCwJkT9dyv6f
+> ls -l
+-rwsr-sr-x 1 flag09 level09 7640 level09
+----r--r-- 1 flag09 level09   26 token
+```
+
+```b
+> xxd token
+0000000: 6634 6b6d 6d36 707c 3d82 7f70 826e 8382  f4kmm6p|=..p.n..
+0000010: 4442 8344 757b 7f8c 890a                 DB.Du{....
+```
+
+Run it
+```b
+> ./level09 token
+tpmhr
+> ./level09 123
+135
+> ./level09 246
+258
+> ./level09 abcd
+aceg
+> ./level09 xyz
+xz|
+> ./level09 az
+a{
+level09@SnowCrash:~$ ./level09 za
+zb
+level09@SnowCrash:~$ ./level09 zab
+zbd 👈 char = curr - i + 1
+
+```
+
+Simple algo
+
+- respect python2 syntax
+- to be run in VM
+
+```b
+line = open('/home/user/level09/token').read().strip()
+print 'res/', ''.join(chr(ord(_) - i) for i, _ in enumerate(line))
 ```
 
