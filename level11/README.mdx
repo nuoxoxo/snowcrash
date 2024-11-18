@@ -20,6 +20,7 @@ level11.lua: setuid setgid a lua script, ASCII text executable
 #!/usr/bin/env lua
 local socket = require("socket")
 local server = assert(socket.bind("127.0.0.1", 5151))
+                             🟡 localhost:5151 ^^^^
 function hash(pass)
   prog = io.popen("echo "..pass.." | sha1sum", "r")
   data = prog:read("*all")
@@ -53,3 +54,5 @@ stack traceback:
 	./level11.lua:3: in main chunk
 	[C]: ?
 ```
+
+# _todo_
