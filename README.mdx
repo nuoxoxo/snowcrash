@@ -749,3 +749,17 @@ line = open('/home/user/level09/token').read().strip()
 print 'res/', ''.join(chr(ord(_) - i) for i, _ in enumerate(line))
 ```
 
+
+# 10
+
+Login
+
+```b
+Login
+
+> ssh level19@$(ifconfig|grep 'inet '|awk 'NR==2 {print $2}') -p 4242
+> Password: s5cAJpM8ev6XHw998pRWG728z
+```
+
+## _todo_
+
