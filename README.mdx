@@ -741,12 +741,19 @@ zbd 👈 char = curr - i + 1
 
 Simple algo
 
-- respect python2 syntax
-- to be run in VM
-
+- p2: decode in vm, respect python2 syntax
+- p3: `scp` to host and decode there 
 ```b
 line = open('/home/user/level09/token').read().strip()
 print 'res/', ''.join(chr(ord(_) - i) for i, _ in enumerate(line))
+```
+```b
+line = open(0, 'rb').read().strip()
+print('res/', ''.join(chr(_ - i) for i, _ in enumerate(line)))
+
+> scp -P 4242 level09@$(ifconfig|grep 'inet '|awk 'NR==2 {print $2}'):/home/user/level09/token $(pwd)
+    25749xKZ8L7DkSCwJkT9dyv6f
+> chmod 777 token && p3 decode.py < token
 ```
 
 
