@@ -1040,9 +1040,9 @@ print "Content-type: text/html\n\n";
 
 sub t {
   $nn = $_[1];
-  $xx = $_[0];  🟡 receives query string, the 1st part thereof
+  $xx = $_[0];         🟡 receives query string, the 1st part thereof
   $xx =~ tr/a-z/A-Z/;  🟡 tr all lowercase alpha to caps
-  $xx =~ s/\s.*//;  🟡 sub all wsp to // ie. is nothing 
+  $xx =~ s/\s.*//;     🟡 sub all wsp to // ie. is nothing 
 
   🔵 Vulnerability -Backtick Injection:
   exploits enclosed shell command execution 
