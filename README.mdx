@@ -63,20 +63,20 @@ My permissions:
   - `namei -l $(pwd)`
   - `getfacl .` (ACL: Access Control Lists)
 
-`/tmp`:
+Special folder: `/tmp`:
 - the `/tmp` folder which is conventionally "world-writable"
 ```b
-ls -ld /tmp
+> ls -ld /tmp
 d-wx-wx-wx 4 root root 80 Nov 19 19:58 /tmp
   ^^ ^^ 🔵 writable/executable
 ```
 - i can w|x but not list files, no one can
 
-🟢 the __Echo-Chmod Combo__, eg.
+Learn the __Echo-Chmod Combo__, eg.
 - `echo "something" > /tmp/go.sh && chmod +x /tmp/go.sh && sh /tmp/go.sh`
 - it's a famous trick
 
-`/etc`:
+Special folder: `/etc`:
 - inspected `etc` and found out it was `rwxr-x`
 ```b
 > ls -ld /etc
@@ -91,9 +91,14 @@ drwxr-xr-x 1 root root 260 Nov 19 18:30 /etc
 flag01:42hDRfypTqqnw:3001:3001::/home/flag/flag01:/bin/bash
 ...
 ```
-- 👆 here we accidentally got `flag01`
+- 👆 accidentally got `flag01`
 
-Let's check if there are more interesting files
+Check if there are more special files \
+We look for any file owned __1) by me, 2) by the account I try to log in__
+- `/` : from root directory
+- `\;` : ends `-exec` and `cat` one file a time
+- `+` : now `find` runs `cat` on several files at once 
+- `2>/dev/null` : no error msg explosion (sending stderr output to `/dev/null`)
 
 ```b
 > find / -user level00 
@@ -105,16 +110,12 @@ OR
 cdiiddwpgswtgt
 cdiiddwpgswtgt
 ```
-
-- `2>/dev/null` : redir stderr output to `/dev/null`
-- `\;` : mark the end of `-exec` and runs `cat` on one file a time
-- `/` : from root directory
-- `+` : forces `find` to run `cat` on many files at once 
+- 👆 we have a cipher
 
 
 Decipher _`cdiiddwpgswtgt`_ in python
 
-```py
+```sh
 a = ord('a')
 for i in range(26):
     print(''.join(chr(a+(ord(c)-a+i)%26) for c in 'cdiiddwpgswtgt'))
