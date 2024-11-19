@@ -573,7 +573,8 @@ Login
 ```
 
 First thought:
-  - options: (not running it, just to see what it _prints_)
+  - not running it, just to see what it does
+  - `file` - `strings` - `xxd` - `readelf` - `objdump`
 
 ```b
 > file level07
@@ -586,8 +587,8 @@ First thought:
 ```
 
 Using `readelf -p .rodata` and `ltrace`
-- `-p` : `string-dump` displays contents of a section as printable str
-- `.rodata` : `read-only data` section = what we want to see
+- `-p` : `printable-string-dump` displays contents of a section 
+- `.rodata` : `read-only data` section = what we want to see 
 
 ```b
 > readelf -p .rodata ./level07 
