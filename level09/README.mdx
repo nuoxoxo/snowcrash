@@ -16,7 +16,8 @@ Login
 0000010: 4442 8344 757b 7f8c 890a                 DB.Du{....
 ```
 
-Run it
+Tryout
+
 ```b
 > ./level09 token
 tpmhr
@@ -38,23 +39,25 @@ zbd 👈 char = curr - i + 1
 ```
 
 Solution
-- simple algo
 
-- p2 in vm: respect the syntax 
+- simple algo
+- either p2 in vm: respect the syntax 
+
 ```b
-# VM /tmp/decode.py
+# /tmp/decode.py
 
 line = open('/home/user/level09/token').read().strip()
 print 'res/', ''.join(chr(ord(_) - i) for i, _ in enumerate(line))
 ```
-- p3 in host: `scp` to host and decode there 
+
+- or p3 in Host: `scp` the token first 
+
 ```b
 line = open(0, 'rb').read().strip()
-print('res/', ''.join(chr(_ - i) for i, _ in enumerate(line)))
+Pprint('res/', ''.join(chr(_ - i) for i, _ in enumerate(line)))
 ```
-```
-# HOST
 
+```b
 > scp -P 4242 level09@$(ifconfig|grep 'inet '|awk 'NR==2 {print $2}'):/home/user/level09/token $(pwd)
     25749xKZ8L7DkSCwJkT9dyv6f
 > chmod 777 token && p3 decode.py < token
