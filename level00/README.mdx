@@ -36,14 +36,14 @@ My permissions:
   - `getfacl .` (ACL: Access Control Lists)
 
 `/tmp`:
-- there's a `/tmp` folder which is conventionally "world-writable"
-- it is true, but not list files, no one can
+- the `/tmp` folder which is conventionally "world-writable"
 ```b
 ls -ld /tmp
 d-wx-wx-wx 4 root root 80 Nov 19 19:58 /tmp
   ^^ ^^ 🔵 writable/executable
 ```
-- 🟢 trick: the __Echo-Chmod Combo__, eg.
+- i can w|x but not list files, no one can
+- 🟢 famous trick: the __Echo-Chmod Combo__, eg.
   - `echo "something" > /tmp/go.sh && chmod +x /tmp/go.sh && sh /tmp/go.sh`
 
 `/etc`:
