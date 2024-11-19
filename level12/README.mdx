@@ -53,10 +53,11 @@ n(t(param("x"), param("y")));
 ```
 
 Solution
-- The injected backtick command gets executed by PERL right away
-- But why we need to fake the ___allcaps___ filename:
-  - because program runs fast, both regex tr and pattern matching `=~` operate at almost the same time
-  - in order avoid asynchronous execution btw steps, we sort if ___continue/delay___ the script a little further
+- Backtick command injection ``` `/*/C` ```
+  - gets executed by PERL right away
+- But why still fakinig an ___allcaps___ filename:
+  - bc. program runs fast, and `tr` and pattern matching `=~` operate at almost simultaneously
+  - to avoid asynchronous execution btw steps, we sort of ___continue/delay___ the script a little 
 
 ```b
 > echo "getflag > /tmp/tmp" > /tmp/C 
