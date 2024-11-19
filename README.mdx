@@ -1072,7 +1072,7 @@ Solution
 - The injected backtick command gets executed by PERL right away
 - But why we need to fake the ___allcaps___ filename:
   - because program runs fast, both regex tr and pattern matching `=~` operate at almost the same time
-  - in order not to disrupt the execution of shell command, we sort if ___continue/delay___ the script a little further
+  - in order avoid asynchronous execution btw steps, we sort if ___continue/delay___ the script a little further
 
 ```b
 > echo "getflag > /tmp/tmp" > /tmp/C 
