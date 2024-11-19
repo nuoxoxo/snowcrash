@@ -43,8 +43,9 @@ d-wx-wx-wx 4 root root 80 Nov 19 19:58 /tmp
   ^^ ^^ 🔵 writable/executable
 ```
 - i can w|x but not list files, no one can
-- 🟢 famous trick: the __Echo-Chmod Combo__, eg.
+- 🟢 the __Echo-Chmod Combo__, eg.
   - `echo "something" > /tmp/go.sh && chmod +x /tmp/go.sh && sh /tmp/go.sh`
+	- it's a famous trick
 
 `/etc`:
 - inspected `etc` and found out it was `rwxr-x`
