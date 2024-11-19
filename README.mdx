@@ -40,31 +40,60 @@ $ ssh level00@$(ifconfig | grep 'inet ' | awk 'NR==2 {print $2}') -p 4242
 # 00
 
 First thought
+- the folder is empty
+- who am i: level00
 
-- `ls` `pwd`
-  - the folder is empty, we are at `/home/user/level00`
-- `id` `whoami` `id flag00`
-  - we are level00 
-  - another user flag00 has different permissions
-
-Let's compare privileges btw level00 and flag00:
-
+What permissions do i have?
+- `ls -ld` 
+  - use `-d` to see info about the current folder (not its list) 
+- `level00 level00` 
+  - I am level00. I am the owner. I am the group.
+- `dr-xr-x---+` 
+  - owner (me) and group members (my group) can `read/exec` (not write) 
 ```b
-> grep level00 /etc/passwd
-level00:x:2000:2000::/home/user/level00:/bin/bash
-> grep flag00 /etc/passwd
-flag00:x:3000:3000::/home/flag/flag00:/bin/bash
-                    ^^^^^^^^^^^^^^^^^ user home directories
-> ls -l /home/user/level00
+level00@SnowCrash:~$ ls -l
 total 0
-> ls -l /home/flag/flag00
-ls: cannot open directory /home/flag/flag00: Permission denied
+level00@SnowCrash:~$ ls -ld
+dr-xr-x---+ 1 level00 level00 100 Mar  5  2016 .
 ```
 
-Let's check if we have other files outside of Home
+My permissions:
+- I own this folder, but i can't vi/rm/mv/touch its contents.
+- can be proved by other commands as well:
+  - `namei -l $(pwd)`
+  - `getfacl .` (ACL: Access Control Lists)
+
+`/tmp`:
+- there's a `/tmp` folder which is conventionally "world-writable"
+- it is true, but not list files, no one can
+```b
+ls -ld /tmp
+d-wx-wx-wx 4 root root 80 Nov 19 19:58 /tmp
+  ^^ ^^ 🔵 writable/executable
+```
+- 🟢 trick: the __Echo-Chmod Combo__, eg.
+  - `echo "something" > /tmp/go.sh && chmod +x /tmp/go.sh && sh /tmp/go.sh`
+
+`/etc`:
+- inspected `etc` and found out it was `rwxr-x`
+```b
+> ls -ld /etc
+drwxr-xr-x 1 root root 260 Nov 19 18:30 /etc
+```
+- ie. we can `ls/cat` it and its contents
+```b
+> ls -l /etc
+(omitted outputs)
+> cat /etc/passwd
+...
+flag01:42hDRfypTqqnw:3001:3001::/home/flag/flag01:/bin/bash
+...
+```
+- 👆 here we accidentally got `flag01`
+
+Let's check if there are more interesting files
 
 ```b
-> ls -l
 > find / -user level00 
 > find / -user level00 2>/dev/null
 > find / -user flag00 2>/dev/null
