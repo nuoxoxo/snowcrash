@@ -7,12 +7,8 @@ Login
 > Password: f2av5il02puano7naaf6adaaf
 ```
 
-New stuff
-- `realpath` - get the full absolute filepath
-- `scp` - secure copy - `scp username@ip:path _local_`
-- `~.pcap` - a Packet Capture to store network packet data captured during network traffic monitoring
+Found a `.pcap` file
 
-Save the `.pcap` to Host
 ```b
 ### VM
 > ls -l
@@ -22,7 +18,13 @@ Save the `.pcap` to Host
 > scp -P 4242 level02@$(ifconfig|grep 'inet '|awk 'NR==2 {print $2}'):/home/user/level02/level02.pcap $(pwd)
 ```
 
-❌ Inspect `.pcap`  
+# 
+- `~.pcap` - Packet Capture
+  - a `.pcap` is used to store network packet data captured during network traffic monitoring
+- Save the `.pcap` to Host
+  - `realpath` - get the full absolute filepath
+  - `scp` - secure copy - `scp username@ip:path _local_`
+- ❌ Inspect w/ `hexdump, xxd`
 
 ```b
 ### Host
@@ -32,9 +34,9 @@ Save the `.pcap` to Host
 > xxd level02.pcap | cut -d ' ' -f2-9 | tr -d ' '
 ```
 
-✅ Use _Wireshark_ 
-- _Analyze - Follow - TCP Stream_ 
-- copy _`TCP Stream`_ to text
+- ✅ Use _Wireshark_ 
+  - we do _Analyze - Follow - TCP Stream_ 
+  - copy _`TCP Stream`_ to text
 
 ```b
     000000D6  00 0d 0a 50 61 73 73 77  6f 72 64 3a 20            ...Passw ord: 
