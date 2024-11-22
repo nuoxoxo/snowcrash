@@ -21,7 +21,9 @@ if [[ $# -eq 1 && "$1" -ge 0 && "$1" -le 14 ]]; then
         12) echo "fa6v5ateaw21peobuub8ipe6s" ;;
         13) echo "g1qKMiRpXf53AWhDaU7FEkczr" ;;
     esac
-    if [[ "$1" -lt 10 ]]; then
+    if [[ "$1" -eq 0 ]]; then
+        lv="level00"
+    elif [[ "$1" -lt 10 ]]; then
         lv="level0$1"
     else
         lv="level$1"
