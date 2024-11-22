@@ -75,10 +75,13 @@ We look for any file owned __1) by me, 2) by the account I try to log in__
 ```b
 > find / -user level00 
 > find / -user level00 2>/dev/null
+```
+
+```b
 > find / -user flag00 2>/dev/null
-> find / -user flag00 -exec cat {} \; 2>/dev/null
+> find / -user flag00 2>/dev/null -exec cat {} \;
 OR
-> find / -user flag00 -exec cat {} + 2>/dev/null
+> find / -user flag00 2>/dev/null -exec cat {} +
 cdiiddwpgswtgt
 cdiiddwpgswtgt
 ```
