@@ -1,7 +1,5 @@
 #!/bin/bash
 
-set -e
-
 wget https://download.openwall.net/pub/projects/john/contrib/macosx/john-1.8.0.9-jumbo-macosx_sse4.zip
 
 tar -xvf john-1.8.0.9-jumbo-macosx_sse4.zip
