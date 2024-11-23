@@ -1080,7 +1080,7 @@ n(t(param("x"), param("y")));
 Solution
 - Backtick command injection ``` `/*/C` ```
   - gets executed by PERL right away
-- But why still fake an ___allcaps___ filename:
+- But why still fake an ALLCAPS filename?
   - bc. program runs fast, and `tr` and pattern matching `=~` operate at almost simultaneously
   - to avoid asynchronous execution btw steps, we sort of ___continue/delay___ the script a little 
 
