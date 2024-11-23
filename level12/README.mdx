@@ -25,7 +25,7 @@ sub t {
   $nn = $_[1];
   $xx = $_[0];         🟡 receives query string, the 1st part thereof
   $xx =~ tr/a-z/A-Z/;  🟡 `tr` all lowercase alpha to caps
-  $xx =~ s/\s.*//;     🟡 `sub` all whitespaces to nothing 
+  $xx =~ s/\s.*//;     🟡 `sub` all whitespaces w/ nothing 
 
   🔵 Vulnerability -Backtick Injection:
   exploits enclosed shell command execution 
