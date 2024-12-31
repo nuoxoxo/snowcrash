@@ -34,31 +34,37 @@ a{
 level09@SnowCrash:~$ ./level09 za
 zb
 level09@SnowCrash:~$ ./level09 zab
-zbd 👈 char = curr - i + 1
-
+zbd 👈 char = curr - i
+👆
+    ^         ^
+z = z + 0  →  z = z - o
+b = a + 1  →  a = b - 1
+d = b + 2  →  b = d - 2
+    v         v
 ```
 
 Solution
 
-- simple algo
-- either p2 in vm: respect the syntax 
-
+- Simple algo. Either use python2 in vm, (respect the syntax), 
 ```b
-# /tmp/decode.py
+# VM
+#   /tmp/decode.py
 
 line = open('/home/user/level09/token').read().strip()
-print 'res/', ''.join(chr(ord(_) - i) for i, _ in enumerate(line))
+print 'res/', ''.join(chr(ord(_) - i) for i,_ in enumerate(line))
 ```
-
-- or p3 in Host: `scp` the token first 
-
+- or p3 in Host, `scp` the token to Host first 
 ```b
+# Host
+#   script
+
 line = open(0, 'rb').read().strip()
-Pprint('res/', ''.join(chr(_ - i) for i, _ in enumerate(line)))
-```
+print('res/', ''.join(chr(_ - i) for i,_ in enumerate(line)))
 
-```b
+#   cli
+
 > scp -P 4242 level09@$(ifconfig|grep 'inet '|awk 'NR==2 {print $2}'):/home/user/level09/token $(pwd)
-    25749xKZ8L7DkSCwJkT9dyv6f
-> chmod 777 token && p3 decode.py < token
+    > 25749xKZ8L7DkSCwJkT9dyv6f
+> chmod 777 token 
+> p3 decode.py < token
 ```

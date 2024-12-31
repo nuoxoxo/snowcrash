@@ -1,12 +1,15 @@
 #!/bin/bash
 
-# old
-#ssh level09@$(ifconfig | grep 'inet ' | awk 'NR==2 {print $2}') -p 4242
+arg="$1"
+: "${arg:=0}"
 
-if [[ $# -eq 1 && "$1" -ge 0 && "$1" -le 14 ]]; then
-    #lv="level$1"
-    echo -n "  "
-    case $1 in
+COLOR='\033[1;32m'
+RESET='\033[0m'
+
+if [[ "$arg" -ge 0 && "$arg" -le 14 ]]; then
+    echo "enter this:";echo -ne "${COLOR}            "
+    case $arg in
+        0) echo "level00" ;;
         1) echo "x24ti5gi3x0ol2eh4esiuxias" ;;
         2) echo "f2av5il02puano7naaf6adaaf" ;;
         3) echo "kooda2puivaav1idi4f57q8iq" ;;
@@ -21,9 +24,10 @@ if [[ $# -eq 1 && "$1" -ge 0 && "$1" -le 14 ]]; then
         12) echo "fa6v5ateaw21peobuub8ipe6s" ;;
         13) echo "g1qKMiRpXf53AWhDaU7FEkczr" ;;
     esac
-    if [[ "$1" -eq 0 ]]; then
-        lv="level00"
-    elif [[ "$1" -lt 10 ]]; then
+    echo -e "${RESET}"
+    # if [[ "$arg" -eq 0 ]]; then
+    #     lv="level00"
+    if [[ "$arg" -lt 10 ]]; then
         lv="level0$1"
     else
         lv="level$1"

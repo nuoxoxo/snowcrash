@@ -7,8 +7,21 @@ Login
 > Password: f2av5il02puano7naaf6adaaf
 ```
 
-Found a `.pcap` file
+### Command list
+```b
+vm
+> ls -l
+> 👇 LOVE RECYCLING/ 👉 ifconfig|grep 'inet '|awk 'NR==2 {print $2}'
+> scp -P 4242 level02@$(ifconfig|grep 'inet '|awk 'NR==2 {print $2}'):/home/user/level02/level02.pcap $(pwd)
 
+host
+> hexdump -C level02.pcap 
+> xxd level02.pcap 
+> xxd level02.pcap | grep -i pass -A10 -B10
+> ❌ xxd level02.pcap | cut -d ' ' -f2-9 | tr -d ' '
+```
+
+Found a `.pcap` file
 ```b
 ### VM
 > ls -l
@@ -18,7 +31,6 @@ Found a `.pcap` file
 > scp -P 4242 level02@$(ifconfig|grep 'inet '|awk 'NR==2 {print $2}'):/home/user/level02/level02.pcap $(pwd)
 ```
 
-# 
 - `~.pcap` - Packet Capture
   - a `.pcap` is used to store network packet data captured during network traffic monitoring
 - Save the `.pcap` to Host

