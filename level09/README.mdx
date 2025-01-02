@@ -12,8 +12,7 @@ Login
 
 ```b
 > xxd token
-0000000: 6634 6b6d 6d36 707c 3d82 7f70 826e 8382  f4kmm6p|=..p.n..
-0000010: 4442 8344 757b 7f8c 890a                 DB.Du{....
+> hexdump -C token
 ```
 
 Tryout
@@ -47,24 +46,24 @@ Solution
 
 - Simple algo. Either use python2 in vm, (respect the syntax), 
 ```b
-# VM
-#   /tmp/decode.py
-
+# p2
 line = open('/home/user/level09/token').read().strip()
 print 'res/', ''.join(chr(ord(_) - i) for i,_ in enumerate(line))
 ```
 - or p3 in Host, `scp` the token to Host first 
 ```b
-# Host
-#   script
-
+# p3
 line = open(0, 'rb').read().strip()
 print('res/', ''.join(chr(_ - i) for i,_ in enumerate(line)))
-
-#   cli
-
+```
+```b
+# scp to Host
 > scp -P 4242 level09@$(ifconfig|grep 'inet '|awk 'NR==2 {print $2}'):/home/user/level09/token $(pwd)
     > 25749xKZ8L7DkSCwJkT9dyv6f
 > chmod 777 token 
 > p3 decode.py < token
+```
+```b
+> su flag09
+    f3iji1ju5yuevaus41q1afiuq
 ```
