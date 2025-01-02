@@ -4,6 +4,7 @@ arg="$1"
 : "${arg:='00'}"
 
 COLOR='\033[1;32m'
+COLOR='\033[1;33m'
 RESET='\033[0m'
 
 if [[ "$arg" -ge 0 && "$arg" -le 14 ]]; then
