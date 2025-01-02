@@ -875,7 +875,7 @@ nc, ltrace
 
 ```b
 # t1
-> nc -lk 6969
+> nc -kl 6969
 ```
 ```b
 # t2
@@ -946,13 +946,16 @@ while true; do
 done
 ```
 
-- Run `alternate.sh` `runner.sh` and `netcat` at the same time
+- Run `alternate.sh` `runner.sh` and `nc -kl` at the same time
 
 ```b
-> \
-/tmp/alt.sh 2>/dev/null & \
-/tmp/go.sh  2>/dev/null & \
+bash /tmp/alt.sh 2>/dev/null & \
+bash /tmp/go.sh  2>/dev/null & \
 nc -kl 6969 | grep -v '[][()]'
+	OR
+nc -kl 6969 | grep -E '[a-z0-9]'
+
+*** kill $(jobs -p)
 ```
 
 
