@@ -1,7 +1,7 @@
 Subject [PDF](https://cdn.intra.42.fr/pdf/pdf/67635/en.subject.pdf) 
 
 # SSH
-tags: `sed + cut` or `awk`
+tags: `sed..cut` or `awk`
 
 ```b
 > ssh -p 4242 level00@$(ifconfig|grep 'inet '|sed -n '2p'|cut -d' ' -f2)
@@ -14,31 +14,15 @@ tags: `sed + cut` or `awk`
 
 ### Command list
 ```b
-> pwd
-> whoami
-> ls -ld
-> namei -l $(pwd) 
-> getfacl . 
-
-> ls -ld /tmp
-> ls -ld /etc
-
-> ls -l /etc
-> ls -l /etc | grep pass
 > cat /etc/passwd 👈 flag0x
-
-> find / -user flag00 2>/dev/null
 > find / -user flag00 2>/dev/null -exec cat {} \;
-OR
+    OR
 > find / -user flag00 2>/dev/null -exec cat {} +
-
-> p3
 ```
 
 ### Thought process
 - `pwd`: we are at `/home/user/level00` it's empty
 - `whoami`: level00
-- What permissions do i have? 👇 
 - `ls -ld` or `ls -la` 
   - `-d`: current dir flag 
 ```b
@@ -59,6 +43,7 @@ dr-xr-x---+ 1 level00 level00 100 Mar  5  2016 .
 d-wx-wx-wx 4 root root 80 Nov 19 19:58 /tmp
   ^^ ^^ 
 ```
+
 - We often do `echo "something" > /tmp/go.sh && chmod +x /tmp/go.sh && sh /tmp/go.sh`
 
 ### `/etc`
@@ -68,7 +53,7 @@ d-wx-wx-wx 4 root root 80 Nov 19 19:58 /tmp
 drwxr-xr-x 1 root root 260 Nov 19 18:30 /etc
        ^ ^
 ```
-- I as others, can `ls / cat` it 
+- We as other_users, can `ls / cat` it 
 ```b
 > ls -l /etc
 > ls -l /etc | grep pass
@@ -113,6 +98,10 @@ cdiiddwpgswtgt
 ### Decipher 
 ```sh
 a = ord('a')
-for i in range(26): print(''.join(chr(a+(ord(c)-a+i)%26) for c in cipher))
+for i in range(26): print(''.join(chr(a+(ord(c)+i)%26) for c in s))
+```
+```b
+> su flag00 nott*
+> getflag | awk '{print $NF}'
 ```
 
