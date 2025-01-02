@@ -6,7 +6,7 @@ tags: `sed..cut` or `awk`
 ```b
 > ssh -p 4242 level00@$(ifconfig|grep 'inet '|sed -n '2p'|cut -d' ' -f2)
                                               ^^^         ^^^
-> ssh -p 4242 level00@$(ifconfig|grep 'inet '|awk 'NR==2 {print $2}')
+> ssh -p 4242 level00@$(ifconfig|grep 'inet '|awk 'NR==2{print $2}')
                                               ^^^
 ```
 
