@@ -29,12 +29,13 @@ Level [00](https://github.com/nuoxoxo/snowcrash/tree/main?tab=readme-ov-file#00)
 Subject [PDF](https://cdn.intra.42.fr/pdf/pdf/67635/en.subject.pdf) 
 
 # SSH
+tags: `sed + cut` or `awk`
 
 ```b
-$ ifconfig
-$ ifconfig | grep inet
-$ ifconfig | grep 'inet ' | awk 'NR==2'
-$ ssh level00@$(ifconfig | grep 'inet ' | awk 'NR==2 {print $2}') -p 4242
+> ssh -p 4242 level00@$(ifconfig|grep 'inet '|sed -n '2p'|cut -d' ' -f2)
+                                              ^^^         ^^^
+> ssh -p 4242 level00@$(ifconfig|grep 'inet '|awk 'NR==2 {print $2}')
+                                              ^^^
 ```
 
 # 00
