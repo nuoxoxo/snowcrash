@@ -1,1 +1,3 @@
-/tmp/alternate.sh 2>/dev/null & /tmp/runner.sh 2>/dev/null & nc -lk 6969
+bash /tmp/alt.sh 2>/dev/null & \
+bash /tmp/go.sh  2>/dev/null & \
+-nc -kl 6969 | grep -v '[][()]'
