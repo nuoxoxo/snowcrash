@@ -64,22 +64,4 @@ Found a `.pcap` file
 
 - `7f` - DE
 - `0d` - CR
-
-Parse the above block
-
-```py
-infile = [[n[-2], n[-1]] for n in [_.split() for _ in open(0).read().split('\n') if len(_.split()) == 3]]
-res = ''
-for i, line in enumerate(infile):
-    print('line/', line, 'i/', i)
-    x, c = line
-    if x == '7f':
-        res = res[:-1]
-    elif c != '.':
-        res += c
-    else:
-        assert(x == '0d')
-print('res/', res)
-
-# ft_waNDReL0L
-```
+- do the p3
