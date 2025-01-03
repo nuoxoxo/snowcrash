@@ -49,4 +49,4 @@ else
     #exit 1
 fi
 
-ssh ${lv}@$(ifconfig | grep 'inet ' | awk 'NR==4 {print $2}') -p 4242
+ssh ${lv}@$(ifconfig|grep 'inet '|awk 'NR==1 {first=$0} END {print $2}') -p 4242
