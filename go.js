@@ -19,8 +19,8 @@ function get_readme_path(dir) {
     const stats = fs.statSync(filepath)
 
     if (stats.isDirectory() && filename.startsWith('level')) {
-      res.push( ... get_readme_path(filepath))
-    } else if (stats.isFile() && filename.endsWith('README.mdx') && ! filepath.endsWith('cfo/README.mdx')) {
+      res.push( ... get_readme_path(filepath+'/resources'))
+    } else if (stats.isFile() && filename.endsWith('README.mdx') && ! filepath.endsWith('c/README.mdx')) {
       res.push(filepath)
       // console.log(filepath)
     }
