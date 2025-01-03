@@ -35,15 +35,18 @@ if [[ "$arg" -ge 0 && "$arg" -le 14 ]]; then
     echo -e "${YELLOW}${SP}${SP}${SP}${OUTPUT}${RESET}"
     # if [[ "$arg" -eq 0 ]]; then
     #     lv="level00"
-    if [[ "$arg" -lt 10 ]]; then
+    if [[ "$arg" -eq 0 ]]; then
+        lv="level00"
+    elif [[ "$arg" -lt 10 ]]; then
         lv="level0$1"
     else
         lv="level$1"
     fi
+    echo 'here/ ' $lv
 else
     lv="level00"
     #echo "~[0, 15)"
     #exit 1
 fi
 
-ssh ${lv}@$(ifconfig | grep 'inet ' | awk 'NR==2 {print $2}') -p 4242
+ssh ${lv}@$(ifconfig | grep 'inet ' | awk 'NR==4 {print $2}') -p 4242
