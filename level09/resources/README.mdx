@@ -6,7 +6,7 @@ Login
 
 ```b
 > ssh level09@$(ifconfig|grep 'inet '|awk 'NR==2 {print $2}') -p 4242
-> Password: 25749xKZ8L7DkSCwJkT9dyv6f
+> Password: 
 > ls -l
 -rwsr-sr-x 1 flag09 level09 7640 level09
 ----r--r-- 1 flag09 level09   26 token
@@ -64,8 +64,4 @@ print('res/', ''.join(chr(_ - i) for i,_ in enumerate(line)))
     > 25749xKZ8L7DkSCwJkT9dyv6f
 > chmod 777 token 
 > p3 decode.py < token
-```
-```b
-> su flag09
-    f3iji1ju5yuevaus41q1afiuq
 ```
