@@ -8,17 +8,18 @@ cd john-1.8.0.9-jumbo-macosx_sse4/run
 if ! [ -d "john" ]; then
     git clone https://github.com/openwall/john.git
     cd john/src && ./configure && make
+    cd ../..
 fi
 
-scp -P 4242 level01@$(ifconfig|grep 'inet '|sort|sed -n '4p'|awk -F' ' '{print $2}'):/etc/passwd $(pwd)/infile
-
-cat infile|grep flag01|awk -F: '{print $2}'
-cat infile|grep flag01 > infile
-cat infile
-
 cd john/run
+
+scp -P 4242 level01@$(ifconfig|grep 'inet '|awk 'NR==1 {first=$0} END {print $2}'):/etc/passwd $(pwd)/infile
+
+cat infile | grep flag01 | awk -F: '{print $2}'
+
+#./john --format=descrypt-opencl --show infile
 ./john infile
 ./john --show infile
-cd ../..
 
+cd ../..
 # rm -rf john*
