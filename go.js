@@ -32,7 +32,7 @@ function get_readme_path(dir) {
 
 function get_readme_content() {
 
-  let content = fs.readFileSync(__dirname + '/tokens.md', 'utf-8')
+  let content = fs.readFileSync(__dirname + '/tokens.mdx', 'utf-8')
   let branch_addr = process.env.GITHUB_SERVER_URL + '/' + 
     process.env.GITHUB_REPOSITORY + '/tree/' + 
     process.env.GITHUB_REF_NAME + '?tab=readme-ov-file#'
